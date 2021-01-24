@@ -1,18 +1,19 @@
 #todo list:
 #Implement isJumped condition (boolean value)
-#added comments so it's readable (duh)
+#add comments so it's readable (duh)
+#Make jumping smoother (not linear)
 
 import pygame
 import random
+import numpy
 
 pygame.init()
-screen = pygame.display.set_mode((500,500))
+screen = pygame.display.set_mode((1280,720))
 pygame.display.set_caption("MultiplayerDinosaur")
+defaultSprite = pygame.image.load("Sprites/Dinosaur/Dinosaur.png")
 
 #sets some important variables
-xPos = 250
-yPos = 250
-xVel = 0
+yPos = 360
 yVel = 0
 isJump = False
 jumpCounter = 1
@@ -23,10 +24,13 @@ FPS = 30
 
 def Jump(yValue, jump):
     if isJump == True:
-        if jump <= 5: #max jump height
-            yValue -= (1/jump*2)*50
-        elif jump >= 10 and jump <= 15:
-            yValue += (jump-10)*15
+        #jump maths (linear for now)
+        if jump <= 10: #max jump height
+            yValue -= 10
+        elif jump > 10 and jump <= 20:
+            if yValue < 360:
+                yValue += 10
+            
         else:
             jump = 1
 
@@ -38,16 +42,16 @@ def Jump(yValue, jump):
 run = True
 
 while run:
-
+ 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
 
     yPos = Jump(yPos, jumpCounter)
     jumpCounter += 1
-    if jumpCounter > 15:
+    if jumpCounter > 25: #5 extra frames for a tiny delay
         isJump = False
-    print(isJump)
+
 
 
     #Input handling
@@ -60,8 +64,10 @@ while run:
 
     #drawing stuff    
     screen.fill((255,255,255)) 
-    pygame.draw.rect(screen, (0,0,0), (250, yPos, 10, 10))
-     
+    pygame.draw.rect(screen, (0,0,0), (640, yPos, 10, 50))
+
+    #screen.blit(defaultSprite, (640, yPos)) REALLY BIG! DON'T ADD YET!
+
     pygame.display.update()
     
     #sets FPS to certain value
