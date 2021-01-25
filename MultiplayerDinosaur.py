@@ -22,6 +22,7 @@ jumpHeight = 20
 #sounds
 jumpSound = pygame.mixer.Sound("Sound/Sound effects/LVLDJUMP.wav")
 deathSound = pygame.mixer.Sound("Sound/Sound effects/LVLDDEATH.wav")
+pygame.mixer.music.load('Sound/Sound effects/BeepBox-Song.mp3')
 
 #Sets up FPS manager to keep it at 60 always
 fpsClock = pygame.time.Clock()
@@ -38,7 +39,7 @@ class cactusObject(object):
     def move(self):
         if self.x < 0:
             self.x = 1280
-        self.x -= 20
+        self.x -= 50
 
     def collided(self, dinoY):
         print(dinoY+100, self.y)
@@ -58,6 +59,7 @@ cactus = cactusObject(1280, 500)
 
 
 def Jump(yValue, jump):
+    
     if isJump == True:
         #jump maths (linear for now)
         if jump <= 10: #max jump height
@@ -76,6 +78,8 @@ def Jump(yValue, jump):
         
 run = True
 
+pygame.mixer.music.play(0)
+
 while run:
  
     for event in pygame.event.get():
@@ -92,10 +96,10 @@ while run:
     cactus.move()
 
     if cactus.collided(yPos) == True:
+        pygame.mixer.music.stop()
         pygame.mixer.Sound.play(deathSound)
         pygame.time.delay(1000)
         run = False
-
 
 
     #Input handling
