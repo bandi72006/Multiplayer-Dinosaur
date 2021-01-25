@@ -11,12 +11,17 @@ screen = pygame.display.set_mode((1280,720))
 pygame.display.set_caption("MultiplayerDinosaur")
 defaultSprite = pygame.image.load("Sprites/Dinosaur/Dinosaur.png")
 
+
 #sets some important variables
-yPos = 500
+yPos = 450
 yVel = 0
 isJump = False
 jumpCounter = 1
 jumpHeight = 20
+
+#sounds
+jumpSound = pygame.mixer.Sound("Sound/Sound effects/LVLDJUMP.wav")
+deathSound = pygame.mixer.Sound("Sound/Sound effects/LVLDDEATH.wav")
 
 #Sets up FPS manager to keep it at 60 always
 fpsClock = pygame.time.Clock()
@@ -32,13 +37,13 @@ class cactusObject(object):
   
     def move(self):
         if self.x < 0:
-            self.x = 500
-        self.x -= 5
+            self.x = 1280
+        self.x -= 20
 
     def collided(self, dinoY):
-        print(dinoY+50, self.y)
-        if (dinoY+50) > self.y:
-            if(self.x > 200 and self.x <250):
+        print(dinoY+100, self.y)
+        if (dinoY+100) > self.y:
+            if(self.x > 200 and self.x <300):
                 return True
         
         return False
@@ -86,7 +91,10 @@ while run:
 
     cactus.move()
 
-    cactus.collided(yPos)
+    if cactus.collided(yPos) == True:
+        pygame.mixer.Sound.play(deathSound)
+        pygame.time.delay(1000)
+        run = False
 
 
 
@@ -95,12 +103,13 @@ while run:
 
     if keys[pygame.K_SPACE] or keys[pygame.K_UP]:
         if isJump == False:
+            pygame.mixer.Sound.play(jumpSound)
             isJump = True
             jumpCounter = 1
 
     #drawing stuff    
     screen.fill((255,255,255)) 
-    pygame.draw.rect(screen, (0,0,0), (200, yPos, 50, 50))
+    pygame.draw.rect(screen, (0,0,0), (200, yPos, 100, 100))
     cactus.draw()
     pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))
 
@@ -111,4 +120,5 @@ while run:
     #sets FPS to certain value
     fpsClock.tick(FPS)
 
-pygame.quit()
+
+#pygame.quit()
