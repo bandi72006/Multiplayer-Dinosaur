@@ -1,7 +1,12 @@
 #todo list:
-#Implement isJumped condition (boolean value)
 #add comments so it's readable (duh)
 #Make jumping smoother (not linear)
+#Add a score system
+#Add a game speed system that relies on the score (higher score = faster)
+#Spacebar held frames for jump height
+
+#GONZALO CAN  U SEE THIS?!?!?!
+
 
 import pygame
 import random
@@ -60,6 +65,15 @@ cactus = cactusObject(1280, 500)
 
 def Jump(yValue, jump):
     
+#    def Jump(Ypos):
+#      Vaccel = 200     CREDITS TO: gonzilo96
+#  Ypos=Startpos
+#  Ypos =+ Vaccel
+#  while Ypos != Startpos:
+#    vaccel =-10
+#    Ypos =+ vaccel
+
+
     if isJump == True:
         #jump maths (linear for now)
         if jump <= 10: #max jump height
