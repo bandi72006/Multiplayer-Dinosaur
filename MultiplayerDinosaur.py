@@ -1,4 +1,4 @@
-#todo list:
+#todo list:Gonz
 #add comments so it's readable (duh)
 #Make jumping smoother (not linear)
 #Add a score system
