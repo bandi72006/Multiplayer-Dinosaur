@@ -4,6 +4,9 @@
 #Add a score system
 #Add a game speed system that relies on the score (higher score = faster)
 #Spacebar held frames for jump height
+#Gonzalo
+
+
 
 import pygame
 import random
