@@ -1,15 +1,10 @@
-#todo list: Bandar 
+#todo list:
 #add comments so it's readable (duh)
 #Make jumping smoother (not linear)
 #Add a score system
 #Add a game speed system that relies on the score (higher score = faster)
 #Spacebar held frames for jump height
 
-<<<<<<< HEAD
-=======
-#GONZALO CAN  U SEE THIS?!?!?!
-#hellobandipants
->>>>>>> e4addb6df1f5ffd5607c5d9576d4171c4bb920e0
 
 import pygame
 import random
