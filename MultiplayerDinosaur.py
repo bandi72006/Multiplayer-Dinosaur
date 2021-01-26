@@ -1,11 +1,9 @@
-#todo list:
+#todo list: Bandar 
 #add comments so it's readable (duh)
 #Make jumping smoother (not linear)
 #Add a score system
 #Add a game speed system that relies on the score (higher score = faster)
 #Spacebar held frames for jump height
-
-#GONZALO CAN  U SEE THIS?!?!?!
 
 
 import pygame
@@ -19,10 +17,10 @@ defaultSprite = pygame.image.load("Sprites/Dinosaur/Dinosaur.png")
 
 #sets some important variables
 yPos = 450
-yVel = 0
 isJump = False
 jumpCounter = 1
 jumpHeight = 20
+yVel = 0
 
 #sounds
 jumpSound = pygame.mixer.Sound("Sound/Sound effects/LVLDJUMP.wav")
@@ -44,7 +42,7 @@ class cactusObject(object):
     def move(self):
         if self.x < 0:
             self.x = 1280
-        self.x -= 50
+        self.x -= 20
 
     def collided(self, dinoY):
         print(dinoY+100, self.y)
@@ -63,32 +61,47 @@ class cactusObject(object):
 cactus = cactusObject(1280, 500)
 
 
-def Jump(yValue, jump):
+#def Jump(yValue, jump):
     
-#    def Jump(Ypos):
-#      Vaccel = 200     CREDITS TO: gonzilo96
-#  Ypos=Startpos
-#  Ypos =+ Vaccel
-#  while Ypos != Startpos:
-#    vaccel =-10
-#    Ypos =+ vaccel
+def Jump(yValue, Vel):
+    #CREDITS TO: AndSans for the jumping mechanics!
 
-
+    yValue -= Vel
     if isJump == True:
-        #jump maths (linear for now)
-        if jump <= 10: #max jump height
-            yValue -= 20
-        elif jump > 10 and jump <= jumpHeight:
-            if yValue < 500:
-                yValue += 20
-            
+        Vel = 20
+        if Vel > 0:
+            yValue += Vel
         else:
-            jump = 1
+            Vel = 0
 
-    else:
-        jump = 1
 
-    return yValue
+
+
+
+    #def Jump(Ypos):
+      #Vaccel = 200
+  
+  #Ypos=Startpos
+  #Ypos =+ Vaccel
+  #while Ypos != Startpos:
+    #vaccel =-10
+   # Ypos =+ vaccel
+
+    #if isJump == True:
+        #jump maths (linear for now)
+        #if jump <= 10: #max jump height
+            #yValue -= 20
+        #elif jump > 10 and jump <= jumpHeight:
+            #if yValue < 500:
+                #yValue += 20
+            
+        #else:
+            #jump = 1
+
+    #else:
+        #jump = 1
+
+
         
 run = True
 
@@ -102,10 +115,10 @@ while run:
 
 
     #Movement
-    yPos = Jump(yPos, jumpCounter)
-    jumpCounter += 1
-    if jumpCounter > jumpHeight: #5 extra frames for a tiny delay
-        isJump = False
+    yPos = Jump(yPos, yVel)
+
+    #if jumpCounter > jumpHeight: #5 extra frames for a tiny delay
+        #isJump = False
 
     cactus.move()
 
