@@ -44,7 +44,6 @@ class cactusObject(object):
         self.x -= 20
 
     def collided(self, dinoY):
-        print(dinoY+100, self.y)
         if (dinoY+100) > self.y:
             if(self.x > 200 and self.x <300):
                 return True
@@ -65,16 +64,15 @@ cactus = cactusObject(1280, 500)
 def Jump(yValue, Vel):
     #CREDITS TO: AndSans for the jumping mechanics!
 
-    yValue -= Vel
     if isJump == True:
-        Vel = 20
-        if Vel > 0:
-            yValue += Vel
-        else:
-            Vel = 0
-
-
-
+        if yValue < 451: #One more than the ground level
+            Vel -= 2
+            yValue -= Vel  
+    
+    else:
+        yValue = 450          
+    
+    return yValue, Vel
 
 
     #def Jump(Ypos):
@@ -114,7 +112,10 @@ while run:
 
 
     #Movement
-    yPos = Jump(yPos, yVel)
+    yPos, yVel = Jump(yPos, yVel)
+    if yPos > 450:
+        yPos = 450
+        isJump = False
 
     #if jumpCounter > jumpHeight: #5 extra frames for a tiny delay
         #isJump = False
@@ -134,8 +135,10 @@ while run:
     if keys[pygame.K_SPACE] or keys[pygame.K_UP]:
         if isJump == False:
             pygame.mixer.Sound.play(jumpSound)
+            yVel = 30
             isJump = True
-            jumpCounter = 1
+            
+
 
     #drawing stuff    
     screen.fill((255,255,255)) 
@@ -151,4 +154,4 @@ while run:
     fpsClock.tick(FPS)
 
 
-#pygame.quit()
+pygame.quit()
