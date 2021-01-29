@@ -20,6 +20,7 @@ isJump = False
 jumpCounter = 1
 jumpHeight = 20
 yVel = 0
+score = 0 
 
 #sounds
 jumpSound = pygame.mixer.Sound("Sound/Sound effects/LVLDJUMP.wav")
@@ -57,6 +58,8 @@ class cactusObject(object):
 
 
 cactus = cactusObject(1280, 500)
+
+font = pygame.font.Font('freesansbold.ttf',25)
 
 
 #def Jump(yValue, jump):
@@ -105,7 +108,7 @@ run = True
 pygame.mixer.music.play(0)
 
 while run:
- 
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
@@ -122,12 +125,14 @@ while run:
 
     cactus.move()
 
+    score += 1
+    text = font.render(str(score), True, (0,0,0))
+
     if cactus.collided(yPos) == True:
         pygame.mixer.music.stop()
         pygame.mixer.Sound.play(deathSound)
         pygame.time.delay(1000)
         run = False
-
 
     #Input handling
     keys = pygame.key.get_pressed()
@@ -137,12 +142,15 @@ while run:
             pygame.mixer.Sound.play(jumpSound)
             yVel = 30
             isJump = True
-            
+
+    if keys[pygame.K_DOWN]:
+            yVel = int((yVel - 30)*1.1) #+30m part so it's always psitiive and falls down
 
 
     #drawing stuff    
     screen.fill((255,255,255)) 
     pygame.draw.rect(screen, (0,0,0), (200, yPos, 100, 100))
+    screen.blit(text, (1100, 25))
     cactus.draw()
     pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))
 
