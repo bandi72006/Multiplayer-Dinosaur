@@ -5,6 +5,8 @@
 #Add a game speed system that relies on the score (higher score = faster)
 #Spacebar held frames for jump height
 
+#Game music by: Lee
+
 import pygame
 import random
 
@@ -13,27 +15,18 @@ screen = pygame.display.set_mode((1280,720))
 pygame.display.set_caption("MultiplayerDinosaur")
 defaultSprite = pygame.image.load("Sprites/Dinosaur/Dinosaur.png")
 
-
-#sets some important variables
-yPos = 450
-isJump = False
-jumpCounter = 1
-jumpHeight = 20
-yVel = 0
-score = 0 
-
 #sounds
 jumpSound = pygame.mixer.Sound("Sound/Sound effects/LVLDJUMP.wav")
 deathSound = pygame.mixer.Sound("Sound/Sound effects/LVLDDEATH.wav")
-pygame.mixer.music.load('Sound/Sound effects/BeepBox-Song.mp3')
+pygame.mixer.music.load('Sound/Music/BeepBox-Song.mp3')
 
-#Sets up FPS manager to keep it at 60 always
+#Sets up FPS manager to keep it at 30 always
 fpsClock = pygame.time.Clock()
 FPS = 30
 
-class cactusObject(object):
+class cactusObject:
     def __init__(self, x, y):
-        self.x = x
+        self.x = x + random.randint(200,1000)
         self.y = y
         self.type = random.randint(1,3)
         self.width = 20 
@@ -41,7 +34,7 @@ class cactusObject(object):
   
     def move(self):
         if self.x < 0:
-            self.x = 1280
+            self.x = 1280 + random.randint(200,1000) #random added x value so there are gaps between each cactus
         self.x -= 20
 
     def collided(self, dinoY):
@@ -55,19 +48,15 @@ class cactusObject(object):
     def draw(self):
         pygame.draw.rect(screen, (100,255,100), (self.x, self.y, self.width, self.height))
 
-
-
-cactus = cactusObject(1280, 500)
-
 font = pygame.font.Font('freesansbold.ttf',25)
 
 
 #def Jump(yValue, jump):
     
-def Jump(yValue, Vel):
+def Jump(yValue, Vel, isjumpbool):
     #CREDITS TO: AndSans for the jumping mechanics!
 
-    if isJump == True:
+    if isjumpbool == True:
         if yValue < 451: #One more than the ground level
             Vel -= 2
             yValue -= Vel  
@@ -78,88 +67,91 @@ def Jump(yValue, Vel):
     return yValue, Vel
 
 
-    #def Jump(Ypos):
-      #Vaccel = 200
-  
-  #Ypos=Startpos
-  #Ypos =+ Vaccel
-  #while Ypos != Startpos:
-    #vaccel =-10
-   # Ypos =+ vaccel
+def main():
+    
+    #Creates all cacti objects and stores them in a list
+    cacti = [cactusObject(1280, 500) for i in range(3)]
 
-    #if isJump == True:
-        #jump maths (linear for now)
-        #if jump <= 10: #max jump height
-            #yValue -= 20
-        #elif jump > 10 and jump <= jumpHeight:
-            #if yValue < 500:
-                #yValue += 20
-            
-        #else:
-            #jump = 1
+    #sets some important variables
+    yPos = 450
+    isJump = False
+    yVel = 0
+    score = 0 
+    run = True
+    pygame.mixer.music.play(0)
 
-    #else:
-        #jump = 1
+    while run:
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
 
 
+        #Movement
+        yPos, yVel = Jump(yPos, yVel, isJump)
+        if yPos > 450:
+            yPos = 450
+            isJump = False
+
+        for cactus in cacti:
+            cactus.move()
+
+        score += 1
+        text = font.render(str(score), True, (0,0,0))
+
+        #Input handling
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_SPACE] or keys[pygame.K_UP]:
+            if isJump == False:
+                pygame.mixer.Sound.play(jumpSound)
+                yVel = 30
+                isJump = True
+
+        if keys[pygame.K_DOWN]:
+                yVel = int((yVel - 30)*1.1) #-30 part so it's always psitiive and falls down
+
+
+        #drawing stuff    
+        screen.fill((255,255,255)) 
+        pygame.draw.rect(screen, (0,0,0), (200, yPos, 100, 100))
+        screen.blit(text, (1100, 25))
+
+        for cactus in cacti:
+            cactus.draw()
+
+        pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))
+
+        #screen.blit(defaultSprite, (640, yPos)) REALLY BIG! DON'T ADD YET!
+
+        pygame.display.update()
         
-run = True
+        #sets FPS to certain value
+        fpsClock.tick(FPS)
 
-pygame.mixer.music.play(0)
+        #Collisioin detection AFTER drawing so no visual bugs happen
+        for cactus in cacti:
+            if cactus.collided(yPos) == True:
+                pygame.mixer.music.stop()
+                pygame.mixer.Sound.play(deathSound)
+                pygame.time.delay(1000)
+                run = False
+                break
 
-while run:
+def playAgain():
+    pygame.draw.rect(screen, (0,0,0), (1280/2, 720/2, 100, 50))
+    for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
 
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                return True
+            else:
+                return False
+
+while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            run = False
-
-
-    #Movement
-    yPos, yVel = Jump(yPos, yVel)
-    if yPos > 450:
-        yPos = 450
-        isJump = False
-
-    #if jumpCounter > jumpHeight: #5 extra frames for a tiny delay
-        #isJump = False
-
-    cactus.move()
-
-    score += 1
-    text = font.render(str(score), True, (0,0,0))
-
-    if cactus.collided(yPos) == True:
-        pygame.mixer.music.stop()
-        pygame.mixer.Sound.play(deathSound)
-        pygame.time.delay(1000)
-        run = False
-
-    #Input handling
-    keys = pygame.key.get_pressed()
-
-    if keys[pygame.K_SPACE] or keys[pygame.K_UP]:
-        if isJump == False:
-            pygame.mixer.Sound.play(jumpSound)
-            yVel = 30
-            isJump = True
-
-    if keys[pygame.K_DOWN]:
-            yVel = int((yVel - 30)*1.1) #+30m part so it's always psitiive and falls down
-
-
-    #drawing stuff    
-    screen.fill((255,255,255)) 
-    pygame.draw.rect(screen, (0,0,0), (200, yPos, 100, 100))
-    screen.blit(text, (1100, 25))
-    cactus.draw()
-    pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))
-
-    #screen.blit(defaultSprite, (640, yPos)) REALLY BIG! DON'T ADD YET!
-
-    pygame.display.update()
-    
-    #sets FPS to certain value
-    fpsClock.tick(FPS)
-
-
-pygame.quit()
+            pygame.quit()
+    if playAgain() == True:
+        main()
