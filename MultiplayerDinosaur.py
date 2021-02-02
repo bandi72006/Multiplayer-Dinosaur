@@ -14,6 +14,8 @@ screen = pygame.display.set_mode((1280,720))
 pygame.display.set_caption("MultiplayerDinosaur")
 defaultSprite = pygame.image.load("Sprites/Dinosaur/Dinosaur.png")
 
+font = pygame.font.Font('freesansbold.ttf',25)
+
 #sounds
 jumpSound = pygame.mixer.Sound("Sound/Sound effects/LVLDJUMP.wav")
 deathSound = pygame.mixer.Sound("Sound/Sound effects/LVLDDEATH.wav")
@@ -47,9 +49,6 @@ class cactusObject:
     def draw(self):
         pygame.draw.rect(screen, (100,255,100), (self.x, self.y, self.width, self.height))
 
-font = pygame.font.Font('freesansbold.ttf',25)
-
-
 #def Jump(yValue, jump):
     
 def Jump(yValue, Vel, isjumpbool):
@@ -77,6 +76,11 @@ def main():
     yVel = 0
     score = 0 
     run = True
+
+    highScoreFile = open("highScoreFile.txt", "r")
+    highScore = highScoreFile.read()
+    highScoreFile.close()
+
     pygame.mixer.music.play(0)
 
     while run:
@@ -96,7 +100,8 @@ def main():
             cactus.move()
 
         score += 1
-        text = font.render(str(score), True, (0,0,0))
+        scoreText = font.render(str(score), True, (0,0,0))
+        highScoreText = font.render(str(highScore), True, (0,0,0))
 
         #Input handling
         keys = pygame.key.get_pressed()
@@ -114,7 +119,8 @@ def main():
         #drawing stuff    
         screen.fill((255,255,255)) 
         pygame.draw.rect(screen, (0,0,0), (200, yPos, 100, 100))
-        screen.blit(text, (1100, 25))
+        screen.blit(scoreText, (1100, 25))
+        screen.blit(highScoreText, (1200, 25))
 
         for cactus in cacti:
             cactus.draw()
@@ -134,6 +140,12 @@ def main():
                 pygame.mixer.music.stop()
                 pygame.mixer.Sound.play(deathSound)
                 pygame.time.delay(1000)
+
+                if score > int(highScore):
+                    highScoreFile = open("highScoreFile.txt", "w")
+                    highScoreFile.write(str(score))
+                    highScoreFile.close()
+
                 run = False
                 break
 
