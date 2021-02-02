@@ -1,7 +1,6 @@
 #todo list:
 #add comments so it's readable (duh)
-#Make jumping smoother (not linear)
-#Add a score system
+#Sprites/animations
 #Add a game speed system that relies on the score (higher score = faster)
 #Spacebar held frames for jump height
 
@@ -26,7 +25,7 @@ FPS = 30
 
 class cactusObject:
     def __init__(self, x, y):
-        self.x = x + random.randint(200,1000)
+        self.x = x + random.randint(500,1000)
         self.y = y
         self.type = random.randint(1,3)
         self.width = 20 
@@ -34,7 +33,7 @@ class cactusObject:
   
     def move(self):
         if self.x < 0:
-            self.x = 1280 + random.randint(200,1000) #random added x value so there are gaps between each cactus
+            self.x = 1280 + random.randint(500,1000) #random added x value so there are gaps between each cactus
         self.x -= 20
 
     def collided(self, dinoY):
