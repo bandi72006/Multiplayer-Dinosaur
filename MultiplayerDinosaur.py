@@ -12,7 +12,7 @@ import random
 pygame.init()
 screen = pygame.display.set_mode((1280,720))
 pygame.display.set_caption("MultiplayerDinosaur")
-defaultSprite = pygame.image.load("Sprites/Dinosaur/Dinosaur.png")
+defaultSprite = pygame.image.load("Sprites/Dinosaur/Dino100px.png")
 
 font = pygame.font.Font('freesansbold.ttf',25)
 
@@ -27,7 +27,7 @@ FPS = 30
 
 class cactusObject:
     def __init__(self, x, y):
-        self.x = x + random.randint(500,1000)
+        self.x = x + random.randint(100,1000)
         self.y = y
         self.type = random.randint(1,3)
         self.width = 20 
@@ -35,7 +35,7 @@ class cactusObject:
   
     def move(self):
         if self.x < 0:
-            self.x = 1280 + random.randint(500,1000) #random added x value so there are gaps between each cactus
+            self.x = 1280 + random.randint(100,1000) #random added x value so there are gaps between each cactus
         self.x -= 20
 
     def collided(self, dinoY):
@@ -118,14 +118,14 @@ def main():
 
         #drawing stuff    
         screen.fill((255,255,255)) 
-        pygame.draw.rect(screen, (0,0,0), (200, yPos, 100, 100))
+        screen.blit(defaultSprite, (200, yPos))
         screen.blit(scoreText, (1100, 25))
         screen.blit(highScoreText, (1200, 25))
-
+        pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))
+    
         for cactus in cacti:
             cactus.draw()
 
-        pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))
 
         #screen.blit(defaultSprite, (640, yPos)) REALLY BIG! DON'T ADD YET!
 
