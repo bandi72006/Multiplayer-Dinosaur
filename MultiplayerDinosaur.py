@@ -12,7 +12,7 @@ import random
 pygame.init()
 screen = pygame.display.set_mode((1280,720))
 pygame.display.set_caption("MultiplayerDinosaur")
-defaultSprite = pygame.image.load("Sprites/Dinosaur/Dino100px.png")
+defaultSprite = pygame.image.load("Sprites/Dinosaur/Dino100px2.png")
 
 font = pygame.font.Font('freesansbold.ttf',25)
 
@@ -76,6 +76,7 @@ def main():
     yVel = 0
     score = 0 
     run = True
+    animationFrame = 1
 
     highScoreFile = open("highScoreFile.txt", "r")
     highScore = highScoreFile.read()
@@ -117,6 +118,15 @@ def main():
 
 
         #drawing stuff    
+
+        animationFrame += 1
+        if animationFrame % 3 == 0:    #If statement so every new frame, the sprite is changed
+            defaultSprite = pygame.image.load("Sprites/Dinosaur/Dino100px1.png")
+        elif animationFrame % 3 == 1:
+            defaultSprite = pygame.image.load("Sprites/Dinosaur/Dino100px2.png")
+        else:
+            defaultSprite = pygame.image.load("Sprites/Dinosaur/Dino100px3.png")
+
         screen.fill((255,255,255)) 
         screen.blit(defaultSprite, (200, yPos))
         screen.blit(scoreText, (1100, 25))
