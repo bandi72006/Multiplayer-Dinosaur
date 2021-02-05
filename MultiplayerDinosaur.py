@@ -1,5 +1,6 @@
 #todo list:
 #add comments so it's readable (duh)
+#Cacti variation and spawning
 #Sprites/animations
 #Add a game speed system that relies on the score (higher score = faster)
 #Spacebar held frames for jump height
@@ -26,28 +27,29 @@ fpsClock = pygame.time.Clock()
 FPS = 30
 
 class cactusObject:
-    def __init__(self, x, y):
+    def __init__(self, x):
         self.x = x + random.randint(100,1000)
-        self.y = y
-        self.type = random.randint(1,3)
-        self.width = 20 
-        self.height = 50
+        self.cactiTypes = [[40, 60], [90, 50], [20,100]]
+        self.type = random.choice(self.cactiTypes)
+        self.y = 550-self.type[1]
   
     def move(self):
         if self.x < 0:
             self.x = 1280 + random.randint(100,1000) #random added x value so there are gaps between each cactus
-        self.x -= 20
+            self.type = random.choice(self.cactiTypes)
+            self.y = 550 - self.type[1]
+        self.x -= 20  
 
     def collided(self, dinoY):
-        if (dinoY+100) > self.y:
-            if(self.x > 200 and self.x <300):
+        if (dinoY+100) > self.y: #+100 for the height of dino
+            if(self.x > 200 and self.x < 300):  #200-300 because dino is always there
                 return True
         
         return False
         
 
     def draw(self):
-        pygame.draw.rect(screen, (100,255,100), (self.x, self.y, self.width, self.height))
+        pygame.draw.rect(screen, (100,255,100), (self.x, self.y, self.type[0], self.type[1]))
 
 #def Jump(yValue, jump):
     
@@ -68,7 +70,8 @@ def Jump(yValue, Vel, isjumpbool):
 def main():
     
     #Creates all cacti objects and stores them in a list
-    cacti = [cactusObject(1280, 500) for i in range(3)]
+    cacti = [cactusObject(1280+random.randint(500,1000)) for i in range(3)]
+
 
     #sets some important variables
     yPos = 450
