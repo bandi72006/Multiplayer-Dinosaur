@@ -1,6 +1,7 @@
 #todo list:
 #add comments so it's readable (duh)
 #Collision is wack sometimes, needs to be fixed
+#Addd a quit button to death screen a
 #Sprites/animations
 #Add a game speed system that relies on the score (higher score = faster)
 #Spacebar held frames for jump height
@@ -17,6 +18,7 @@ pygame.display.set_caption("MultiplayerDinosaur")
 defaultSprite = pygame.image.load("Sprites/Dinosaur/Dino100px2.png")
 
 font = pygame.font.Font('freesansbold.ttf',25)
+menuFont = pygame.font.Font('Sprites/Fonts/menuFont.ttf', 20)
 
 #sounds
 jumpSound = pygame.mixer.Sound("Sound/Sound effects/LVLDJUMP.wav")
@@ -95,7 +97,7 @@ def main():
     highScore = highScoreFile.read()
     highScoreFile.close()
 
-    pygame.mixer.music.play(0)
+    pygame.mixer.music.play(-1) #-1 plays it infinitely
 
     while run:
 
@@ -106,7 +108,8 @@ def main():
 
         #Movement
         yPos, yVel = Jump(yPos, yVel, isJump)
-        if yPos > 450:
+
+        if yPos > 450: #keeps yValue always at 450, as if it hit the ground
             yPos = 450
             isJump = False
 
@@ -173,13 +176,27 @@ def main():
                 break
 
 def playAgain():
-    pygame.draw.rect(screen, (0,0,0), (1280/2, 720/2, 100, 50))
+
+    retryText = menuFont.render("Retry", True, (255,255,255))
+
+    pygame.draw.rect(screen, (0,0,0), ((1280/2)-(100/2), (720/2)-(50/2), 100, 50))
+    screen.blit(retryText, ((1280/2)-(100/2), (720/2)-(50/2)+15))
+
+    pygame.display.update()
+
     for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                return True
+                #checks if mouse is in between those x values (where the box is)
+                if pygame.mouse.get_pos()[0] > (1280/2)-(100/2) and pygame.mouse.get_pos()[0] < (1280/2)-(100/2)+100:
+                    if pygame.mouse.get_pos()[1] > (720/2)-(50/2) and pygame.mouse.get_pos()[1] < (720/2)-(50/2)+50:
+                        return True
+                    else:
+                        return False
+                else:
+                    return False
             else:
                 return False
 
