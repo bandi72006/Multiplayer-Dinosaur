@@ -1,12 +1,13 @@
 #todo list:
 #add comments so it's readable (duh)
-#Cacti variation and spawning
+#Collision is wack sometimes, needs to be fixed
 #Sprites/animations
 #Add a game speed system that relies on the score (higher score = faster)
 #Spacebar held frames for jump height
 
 #Game music by: Lee
 
+from typing import Container
 import pygame
 import random
 
@@ -27,22 +28,31 @@ fpsClock = pygame.time.Clock()
 FPS = 30
 
 class cactusObject:
-    def __init__(self, x):
-        self.x = x + random.randint(100,1000)
+    def __init__(self, x, i):
+        self.x = x - random.randint(100,1000)
         self.cactiTypes = [[40, 60], [90, 50], [20,100]]
         self.type = random.choice(self.cactiTypes)
         self.y = 550-self.type[1]
+        self.order = i #important for calculating distance between each cacti
   
-    def move(self):
-        if self.x < 0:
-            self.x = 1280 + random.randint(100,1000) #random added x value so there are gaps between each cactus
-            self.type = random.choice(self.cactiTypes)
-            self.y = 550 - self.type[1]
+    def move(self, cacti):
+        if (self.x+self.type[0]) < 0:  # +self.type[0] part so it waits until it's completely off screen then moves it back
+            self.x = 1280
+
+            for cactus in cacti:
+                if cactus == self:
+                        continue   #if it starts to check with itself, it goes back to beggining of loop
+
+                while ((self.x - cactus.x) < 1000 and (self.x - cactus.x) > -1000) == True:  #checks if distance between 2 cacti is in between 1000 and -1000 (any distance within 1000 pixels)
+                    self.x += random.randint(1000,3000)  #random added x value so there are gaps between each cactus
+                    self.type = random.choice(self.cactiTypes)
+                    self.y = 550 - self.type[1]
+
         self.x -= 20  
 
     def collided(self, dinoY):
         if (dinoY+100) > self.y: #+100 for the height of dino
-            if(self.x > 200 and self.x < 300):  #200-300 because dino is always there
+            if(self.x > 200-self.type[0] and self.x < 300):  #200-300 because dino is always there
                 return True
         
         return False
@@ -70,7 +80,7 @@ def Jump(yValue, Vel, isjumpbool):
 def main():
     
     #Creates all cacti objects and stores them in a list
-    cacti = [cactusObject(1280+random.randint(500,1000)) for i in range(3)]
+    cacti = [cactusObject(-1000, i) for i in range(3)] #-1000 so it autmoatically gets moved to the beginning
 
 
     #sets some important variables
@@ -101,7 +111,7 @@ def main():
             isJump = False
 
         for cactus in cacti:
-            cactus.move()
+            cactus.move(cacti)
 
         score += 1
         scoreText = font.render(str(score), True, (0,0,0))
@@ -117,7 +127,7 @@ def main():
                 isJump = True
 
         if keys[pygame.K_DOWN]:
-                yVel = int((yVel - 30)*1.1) #-30 part so it's always psitiive and falls down
+                yVel = int((yVel - 30)*0.7) #-30 part so it's always psitiive and falls down
 
 
         #drawing stuff    
