@@ -37,7 +37,7 @@ class cactusObject:
         self.y = 550-self.type[1]
         self.order = i #important for calculating distance between each cacti
   
-    def move(self, cacti):
+    def move(self, cacti, speed):
         if (self.x+self.type[0]) < 0:  # +self.type[0] part so it waits until it's completely off screen then moves it back
             self.x = 1280
 
@@ -50,7 +50,7 @@ class cactusObject:
                     self.type = random.choice(self.cactiTypes)
                     self.y = 550 - self.type[1]
 
-        self.x -= 20  
+        self.x -= 20*speed
 
     def collided(self, dinoY):
         if (dinoY+100) > self.y: #+100 for the height of dino
@@ -92,6 +92,7 @@ def main():
     score = 0 
     run = True
     animationFrame = 1
+    gameSpeed = 1
 
     highScoreFile = open("highScoreFile.txt", "r")
     highScore = highScoreFile.read()
@@ -114,11 +115,13 @@ def main():
             isJump = False
 
         for cactus in cacti:
-            cactus.move(cacti)
+            cactus.move(cacti, gameSpeed)
 
-        score += 1
+        score += gameSpeed
         scoreText = font.render(str(score), True, (0,0,0))
         highScoreText = font.render(str(highScore), True, (0,0,0))
+
+        gameSpeed += 0.001
 
         #Input handling
         keys = pygame.key.get_pressed()
