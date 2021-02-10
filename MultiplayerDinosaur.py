@@ -2,7 +2,8 @@
 #add comments so it's readable (duh)
 #Collision is wack sometimes, needs to be fixed
 #Add a quit button to death screen
-#Sprites/animations
+#Sprites/animations:
+#    .RGB Dino
 #Spacebar held frames for jump height
 #Add speed cap
 
@@ -11,6 +12,9 @@
 from typing import Container
 import pygame
 import random
+from pygame import mouse
+
+from pygame.constants import MOUSEBUTTONDOWN
 
 pygame.init()
 screen = pygame.display.set_mode((1280,720))
@@ -62,7 +66,6 @@ class cactusObject:
     def draw(self):
         pygame.draw.rect(screen, (100,255,100), (self.x, self.y, self.type[0], self.type[1]))
 
-#def Jump(yValue, jump):
     
 def Jump(yValue, Vel, isjumpbool):
     #CREDITS TO: AndSans for the jumping mechanics!
@@ -76,6 +79,15 @@ def Jump(yValue, Vel, isjumpbool):
         yValue = 450          
     
     return yValue, Vel
+
+def mousePressed(x, y, width, height):
+    if pygame.mouse.get_pos()[0] > x and pygame.mouse.get_pos()[0] < x+width: #Checks if x is in between the left and the right of the object
+        if pygame.mouse.get_pos()[1] > y and pygame.mouse.get_pos()[1] < y+height: #Checks if y is in between the top and the bottom of the object
+            return True
+        else:
+            return False
+    else:
+        return False
 
 
 def main():
@@ -100,10 +112,6 @@ def main():
     pygame.mixer.music.play(-1) #-1 plays it infinitely
 
     while run:
-        defaultSprite = pygame.image.load("Sprites/Dinosaur/DefaultDino2.png")
-        pixels = pygame.PixelArray(defaultSprite)
-        pixels.replace((255, 255, 255, 255), (0, 0, 255, 255))
-        del pixels
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -197,16 +205,8 @@ def playAgain():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 #checks if mouse is in between those x values (where the box is)
-                if pygame.mouse.get_pos()[0] > (1280/2)-(100/2) and pygame.mouse.get_pos()[0] < (1280/2)-(100/2)+100:
-                    if pygame.mouse.get_pos()[1] > (720/2)-(50/2) and pygame.mouse.get_pos()[1] < (720/2)-(50/2)+50:
-                        return True
-                    else:
-                        return False
-                else:
-                    return False
-            else:
-                return False
-
+                return mousePressed((1280/2)-(100/2), (720/2)-(50/2), 100, 50)
+                
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
