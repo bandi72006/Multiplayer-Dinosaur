@@ -1,9 +1,8 @@
 #todo list:
 #add comments so it's readable (duh)
 #Collision is wack sometimes, needs to be fixed
-#Addd a quit button to death screen a
+#Add a quit button to death screen
 #Sprites/animations
-#Add a game speed system that relies on the score (higher score = faster)
 #Spacebar held frames for jump height
 
 #Game music by: Lee
@@ -117,7 +116,7 @@ def main():
         for cactus in cacti:
             cactus.move(cacti, gameSpeed)
 
-        score += gameSpeed
+        score += int(gameSpeed)
         scoreText = font.render(str(score), True, (0,0,0))
         highScoreText = font.render(str(highScore), True, (0,0,0))
 
