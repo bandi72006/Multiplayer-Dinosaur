@@ -4,6 +4,7 @@
 #Add a quit button to death screen
 #Sprites/animations
 #Spacebar held frames for jump height
+#Add speed cap
 
 #Game music by: Lee
 
@@ -14,7 +15,6 @@ import random
 pygame.init()
 screen = pygame.display.set_mode((1280,720))
 pygame.display.set_caption("MultiplayerDinosaur")
-defaultSprite = pygame.image.load("Sprites/Dinosaur/Dino100px2.png")
 
 font = pygame.font.Font('freesansbold.ttf',25)
 menuFont = pygame.font.Font('Sprites/Fonts/menuFont.ttf', 20)
@@ -100,7 +100,10 @@ def main():
     pygame.mixer.music.play(-1) #-1 plays it infinitely
 
     while run:
-
+        defaultSprite = pygame.image.load("Sprites/Dinosaur/DefaultDino2.png")
+        pixels = pygame.PixelArray(defaultSprite)
+        pixels.replace((255, 255, 255, 255), (0, 0, 255, 255))
+        del pixels
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -138,12 +141,14 @@ def main():
         #drawing stuff    
 
         animationFrame += 1
-        if animationFrame % 3 == 0:    #If statement so every new frame, the sprite is changed
-            defaultSprite = pygame.image.load("Sprites/Dinosaur/Dino100px1.png")
-        elif animationFrame % 3 == 1:
-            defaultSprite = pygame.image.load("Sprites/Dinosaur/Dino100px2.png")
+        if animationFrame % 4 == 0:    #If statement so every new frame, the sprite is changed
+            defaultSprite = pygame.image.load("Sprites/Dinosaur/E-Dino1.png")
+        elif animationFrame % 4 == 1:
+            defaultSprite = pygame.image.load("Sprites/Dinosaur/E-Dino2.png")
+        elif animationFrame % 4 == 2:
+            defaultSprite = pygame.image.load("Sprites/Dinosaur/E-Dino3.png")
         else:
-            defaultSprite = pygame.image.load("Sprites/Dinosaur/Dino100px3.png")
+            defaultSprite = pygame.image.load("Sprites/Dinosaur/E-Dino2.png")
 
         screen.fill((255,255,255)) 
         screen.blit(defaultSprite, (200, yPos))
