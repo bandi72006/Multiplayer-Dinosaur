@@ -150,13 +150,13 @@ def main():
 
         animationFrame += 1
         if animationFrame % 4 == 0:    #If statement so every new frame, the sprite is changed
-            defaultSprite = pygame.image.load("Sprites/Dinosaur/E-Dino1.png")
+            defaultSprite = pygame.image.load("Sprites/Dinosaur/AussieDino1.png")
         elif animationFrame % 4 == 1:
-            defaultSprite = pygame.image.load("Sprites/Dinosaur/E-Dino2.png")
+            defaultSprite = pygame.image.load("Sprites/Dinosaur/AussieDino2.png")
         elif animationFrame % 4 == 2:
-            defaultSprite = pygame.image.load("Sprites/Dinosaur/E-Dino3.png")
+            defaultSprite = pygame.image.load("Sprites/Dinosaur/AussieDino3.png")
         else:
-            defaultSprite = pygame.image.load("Sprites/Dinosaur/E-Dino2.png")
+            defaultSprite = pygame.image.load("Sprites/Dinosaur/AussieDino2.png")
 
         screen.fill((255,255,255)) 
         screen.blit(defaultSprite, (200, yPos))
@@ -206,7 +206,7 @@ def playAgain():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 #checks if mouse is in between those x values (where the box is)
                 return mousePressed((1280/2)-(100/2), (720/2)-(50/2), 100, 50)
-                
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
