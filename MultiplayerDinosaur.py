@@ -9,10 +9,9 @@
 
 #Game music by: Lee
 
-from typing import Container
 import pygame
 import random
-from pygame import mouse
+import os
 
 from pygame.constants import MOUSEBUTTONDOWN
 
@@ -190,12 +189,21 @@ def main():
                 run = False
                 break
 
-def playAgain():
+def dinoCustomization():
+    screen.fill((255,255,255)) 
+    displayedSprites = ["Sprites/Dinosaur/DefaultDino2.png", "Sprites/Dinosaur/AussieDino2.png", "Sprites/Dinosaur/E-Dino2.png"]
+    for i in range(len(displayedSprites)):
+        currentSprite = pygame.image.load(displayedSprites[i])
+        screen.blit(currentSprite, (i*100, i*2))
 
+
+
+def deathMenu():
     retryText = menuFont.render("Retry", True, (255,255,255))
 
-    pygame.draw.rect(screen, (0,0,0), ((1280/2)-(100/2), (720/2)-(50/2), 100, 50))
-    screen.blit(retryText, ((1280/2)-(100/2), (720/2)-(50/2)+15))
+    pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), (720/2)-50, 100, 50))
+    pygame.draw.rect(screen, (255,255,255), ((1280/2)-(100/2), 720/2+10, 100, 50))
+    screen.blit(retryText, ((1280/2)-(100/2), (720/2)-35))
 
     pygame.display.update()
 
@@ -205,11 +213,24 @@ def playAgain():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 #checks if mouse is in between those x values (where the box is)
-                return mousePressed((1280/2)-(100/2), (720/2)-(50/2), 100, 50)
+                if mousePressed((1280/2)-(100/2), (720/2)-50, 100, 50):
+                    return "replay"
+
+                if mousePressed((1280/2)-(100/2), 720/2+10, 100, 50):
+                    return "dinoChange"
+
+                
+gameState = "deathMenu"
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-    if playAgain() == True:
+
+    deathMenu(gameState)
+
+    if gameState == "replay":
         main()
+    
+    elif gameState == "dinoChange":
+        dinoCustomization()
