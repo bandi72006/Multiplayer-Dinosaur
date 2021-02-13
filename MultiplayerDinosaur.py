@@ -11,7 +11,6 @@
 
 import pygame
 import random
-import os
 
 from pygame.constants import MOUSEBUTTONDOWN
 
@@ -21,6 +20,9 @@ pygame.display.set_caption("MultiplayerDinosaur")
 
 font = pygame.font.Font('freesansbold.ttf',25)
 menuFont = pygame.font.Font('Sprites/Fonts/menuFont.ttf', 20)
+retryText = menuFont.render("Retry", True, (255,255,255))
+
+gameState = "deathMenu"
 
 #sounds
 jumpSound = pygame.mixer.Sound("Sound/Sound effects/LVLDJUMP.wav")
@@ -185,9 +187,10 @@ def main():
                     highScoreFile = open("highScoreFile.txt", "w")
                     highScoreFile.write(str(score))
                     highScoreFile.close()
-
+                
                 run = False
                 break
+    
 
 def dinoCustomization():
     screen.fill((255,255,255)) 
@@ -199,8 +202,7 @@ def dinoCustomization():
 
 
 def deathMenu():
-    retryText = menuFont.render("Retry", True, (255,255,255))
-
+    global gameState
     pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), (720/2)-50, 100, 50))
     pygame.draw.rect(screen, (255,255,255), ((1280/2)-(100/2), 720/2+10, 100, 50))
     screen.blit(retryText, ((1280/2)-(100/2), (720/2)-35))
@@ -214,23 +216,25 @@ def deathMenu():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 #checks if mouse is in between those x values (where the box is)
                 if mousePressed((1280/2)-(100/2), (720/2)-50, 100, 50):
-                    return "replay"
+                    gameState = "play"
 
-                if mousePressed((1280/2)-(100/2), 720/2+10, 100, 50):
-                    return "dinoChange"
+                elif mousePressed((1280/2)-(100/2), 720/2+10, 100, 50):
+                    gameState = "dinoCustomization"
 
-                
-gameState = "deathMenu"
+                else:
+                    gameState = "deathMenu"
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
 
-    deathMenu(gameState)
-
-    if gameState == "replay":
+    if gameState == "play":
         main()
-    
-    elif gameState == "dinoChange":
+        gameState = "deathMenu"
+         
+    if gameState == "deathMenu":
+        deathMenu()
+
+    if gameState == "dinoCustomization":
         dinoCustomization()
