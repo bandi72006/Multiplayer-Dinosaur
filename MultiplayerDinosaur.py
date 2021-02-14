@@ -11,6 +11,7 @@
 
 import pygame
 import random
+from pygame import mouse
 
 from pygame.constants import MOUSEBUTTONDOWN
 
@@ -191,38 +192,70 @@ def main():
                 run = False
                 break
     
-
 def dinoCustomization():
+
+    global gameState
+
     screen.fill((255,255,255)) 
     displayedSprites = ["Sprites/Dinosaur/DefaultDino2.png", "Sprites/Dinosaur/AussieDino2.png", "Sprites/Dinosaur/E-Dino2.png"]
+
     for i in range(len(displayedSprites)):
         currentSprite = pygame.image.load(displayedSprites[i])
-        screen.blit(currentSprite, (i*100, i*2))
+        screen.blit(currentSprite, ((i*200)+100, 100))   #200 pixels between each dino + 100 offset from edge of screen
+
+
+    pygame.draw.rect(screen, (255, 0, 0), (10, 10, 50, 50)) #exit button
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+
+            #exit button code
+            if mousePressed(10, 10, 50, 50):
+                gameState = "deathMenu"
+
+            #A bunch of if statements checking if mouse is clicked on certain dino
+
+            if mousePressed(100, 100, 100, 100):
+                print("1")
+            
+            if mousePressed(300, 100, 100, 100):
+                print("2")
+
+            if mousePressed(500, 100, 100, 100):
+                print("3")
+
+    pygame.display.update()
 
 
 
 def deathMenu():
     global gameState
-    pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), (720/2)-50, 100, 50))
-    pygame.draw.rect(screen, (255,255,255), ((1280/2)-(100/2), 720/2+10, 100, 50))
-    screen.blit(retryText, ((1280/2)-(100/2), (720/2)-35))
+
+    screen.fill((255,255,255)) 
+    pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), (720/2)-50, 100, 50)) #replay button
+    pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), 720/2+10, 100, 50)) #dino customization button
+    screen.blit(retryText, ((1280/2)-(100/2), (720/2)-35)) #retry text on button
 
     pygame.display.update()
 
     for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
+        if event.type == pygame.QUIT:
+            pygame.quit()
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                #checks if mouse is in between those x values (where the box is)
-                if mousePressed((1280/2)-(100/2), (720/2)-50, 100, 50):
-                    gameState = "play"
+        if event.type == pygame.MOUSEBUTTONDOWN:
 
-                elif mousePressed((1280/2)-(100/2), 720/2+10, 100, 50):
-                    gameState = "dinoCustomization"
+            #checks if mouse is in between those x values (where the box is)
+            if mousePressed((1280/2)-(100/2), (720/2)-50, 100, 50):
+                gameState = "play"
 
-                else:
-                    gameState = "deathMenu"
+            elif mousePressed((1280/2)-(100/2), 720/2+10, 100, 50):
+                gameState = "dinoCustomization"
+
+            else:
+                gameState = "deathMenu"
 
 while True:
     for event in pygame.event.get():
@@ -232,7 +265,7 @@ while True:
     if gameState == "play":
         main()
         gameState = "deathMenu"
-         
+        
     if gameState == "deathMenu":
         deathMenu()
 
