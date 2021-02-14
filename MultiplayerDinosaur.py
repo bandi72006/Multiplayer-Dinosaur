@@ -25,6 +25,11 @@ retryText = menuFont.render("Retry", True, (255,255,255))
 
 gameState = "deathMenu"
 
+dinoChoices = [["Sprites/Dinosaur/DefaultDino1.png","Sprites/Dinosaur/DefaultDino2.png","Sprites/Dinosaur/DefaultDino3.png"], 
+["Sprites/Dinosaur/AussieDino1.png", "Sprites/Dinosaur/AussieDino2.png", "Sprites/Dinosaur/AussieDino3.png"], 
+["Sprites/Dinosaur/E-Dino1.png", "Sprites/Dinosaur/E-Dino2.png", "Sprites/Dinosaur/E-Dino3.png"]]
+currentDino = 0
+
 #sounds
 jumpSound = pygame.mixer.Sound("Sound/Sound effects/LVLDJUMP.wav")
 deathSound = pygame.mixer.Sound("Sound/Sound effects/LVLDDEATH.wav")
@@ -152,16 +157,16 @@ def main():
 
         animationFrame += 1
         if animationFrame % 4 == 0:    #If statement so every new frame, the sprite is changed
-            defaultSprite = pygame.image.load("Sprites/Dinosaur/AussieDino1.png")
+            currentSprite = pygame.image.load(dinoChoices[currentDino][0])
         elif animationFrame % 4 == 1:
-            defaultSprite = pygame.image.load("Sprites/Dinosaur/AussieDino2.png")
+            currentSprite = pygame.image.load(dinoChoices[currentDino][1])
         elif animationFrame % 4 == 2:
-            defaultSprite = pygame.image.load("Sprites/Dinosaur/AussieDino3.png")
+            currentSprite = pygame.image.load(dinoChoices[currentDino][2])
         else:
-            defaultSprite = pygame.image.load("Sprites/Dinosaur/AussieDino2.png")
+            currentSprite = pygame.image.load(dinoChoices[currentDino][1])
 
         screen.fill((255,255,255)) 
-        screen.blit(defaultSprite, (200, yPos))
+        screen.blit(currentSprite, (200, yPos))
         screen.blit(scoreText, (1100, 25))
         screen.blit(highScoreText, (1200, 25))
         pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))
@@ -195,6 +200,7 @@ def main():
 def dinoCustomization():
 
     global gameState
+    global currentDino
 
     screen.fill((255,255,255)) 
     displayedSprites = ["Sprites/Dinosaur/DefaultDino2.png", "Sprites/Dinosaur/AussieDino2.png", "Sprites/Dinosaur/E-Dino2.png"]
@@ -219,13 +225,13 @@ def dinoCustomization():
             #A bunch of if statements checking if mouse is clicked on certain dino
 
             if mousePressed(100, 100, 100, 100):
-                print("1")
+                currentDino = 0
             
             if mousePressed(300, 100, 100, 100):
-                print("2")
+                currentDino = 1
 
             if mousePressed(500, 100, 100, 100):
-                print("3")
+                currentDino = 2
 
     pygame.display.update()
 
