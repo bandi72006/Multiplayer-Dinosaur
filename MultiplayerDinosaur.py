@@ -25,9 +25,14 @@ retryText = menuFont.render("Retry", True, (255,255,255))
 
 gameState = "deathMenu"
 
-dinoChoices = [["Sprites/Dinosaur/DefaultDino1.png","Sprites/Dinosaur/DefaultDino2.png","Sprites/Dinosaur/DefaultDino3.png"], 
-["Sprites/Dinosaur/AussieDino1.png", "Sprites/Dinosaur/AussieDino2.png", "Sprites/Dinosaur/AussieDino3.png"], 
-["Sprites/Dinosaur/E-Dino1.png", "Sprites/Dinosaur/E-Dino2.png", "Sprites/Dinosaur/E-Dino3.png"]]
+dinoChoices = [["Sprites/Dinosaur/DefaultDino1.png","Sprites/Dinosaur/DefaultDino2.png","Sprites/Dinosaur/DefaultDino3.png"], #Normal/default dino
+["Sprites/Dinosaur/AussieDino1.png", "Sprites/Dinosaur/AussieDino2.png", "Sprites/Dinosaur/AussieDino3.png"],  #Aussie dino
+["Sprites/Dinosaur/E-Dino1.png", "Sprites/Dinosaur/E-Dino2.png", "Sprites/Dinosaur/E-Dino3.png"], #E-dino
+["Sprites/Dinosaur/CocktailDino1.png", "Sprites/Dinosaur/CocktailDino2.png", "Sprites/Dinosaur/CocktailDino3.png", ], #cocktail dino
+["Sprites/Dinosaur/DolphinDino1.png", "Sprites/Dinosaur/DolphinDino2.png", "Sprites/Dinosaur/DolphinDino1.png", ], #dolphin dino
+["Sprites/Dinosaur/SpiderDino1.png", "Sprites/Dinosaur/SpiderDino2.png", "Sprites/Dinosaur/SpiderDino3.png"], #spider dini
+["Sprites/Dinosaur/GhostDino1.png", "Sprites/Dinosaur/GhostDino2.png", "Sprites/Dinosaur/GhostDino1.png"] #ghost dino
+]
 currentDino = 0
 
 #sounds
@@ -203,12 +208,20 @@ def dinoCustomization():
     global currentDino
 
     screen.fill((255,255,255)) 
-    displayedSprites = ["Sprites/Dinosaur/DefaultDino2.png", "Sprites/Dinosaur/AussieDino2.png", "Sprites/Dinosaur/E-Dino2.png"]
+    displayedSprites = ["Sprites/Dinosaur/DefaultDino2.png", "Sprites/Dinosaur/AussieDino2.png", 
+    "Sprites/Dinosaur/E-Dino2.png", "Sprites/Dinosaur/CocktailDino2.png", "Sprites/Dinosaur/DolphinDino2.png", 
+    "Sprites/Dinosaur/SpiderDino2.png", "Sprites/Dinosaur/GhostDino2.png"]
+
+    y = 1
+    x = 0
 
     for i in range(len(displayedSprites)):
         currentSprite = pygame.image.load(displayedSprites[i])
-        screen.blit(currentSprite, ((i*200)+100, 100))   #200 pixels between each dino + 100 offset from edge of screen
-
+        screen.blit(currentSprite, ((x*200)+100, y*110))   #200 pixels between each dino + 100 offset from edge of screen
+        x += 1
+        if (x*200)+100 > 1280:
+            y += 1
+            x = 0
 
     pygame.draw.rect(screen, (255, 0, 0), (10, 10, 50, 50)) #exit button
 
@@ -223,15 +236,34 @@ def dinoCustomization():
                 gameState = "deathMenu"
 
             #A bunch of if statements checking if mouse is clicked on certain dino
+            if mousePressed(100, 110, 100, 100):
+                currentDino = 0 
+                print(currentDino)
 
-            if mousePressed(100, 100, 100, 100):
-                currentDino = 0
-            
-            if mousePressed(300, 100, 100, 100):
-                currentDino = 1
+            if mousePressed(300, 110, 100, 100):
+                currentDino = 1 
+                print(currentDino)
 
-            if mousePressed(500, 100, 100, 100):
-                currentDino = 2
+            if mousePressed(500, 110, 100, 100):
+                currentDino = 2 
+                print(currentDino)
+
+            if mousePressed(700, 110, 100, 100):
+                currentDino = 3 
+                print(currentDino)
+
+            if mousePressed(900, 110, 100, 100):
+                currentDino = 4 
+                print(currentDino)
+
+            if mousePressed(1100, 110, 100, 100):
+                currentDino = 5
+                print(currentDino)
+
+            if mousePressed(100, 220, 100, 100):
+                currentDino = 6
+                print(currentDino)
+
 
     pygame.display.update()
 
