@@ -30,10 +30,13 @@ dinoChoices = [["Sprites/Dinosaur/DefaultDino1.png","Sprites/Dinosaur/DefaultDin
 ["Sprites/Dinosaur/E-Dino1.png", "Sprites/Dinosaur/E-Dino2.png", "Sprites/Dinosaur/E-Dino3.png"], #E-dino
 ["Sprites/Dinosaur/CocktailDino1.png", "Sprites/Dinosaur/CocktailDino2.png", "Sprites/Dinosaur/CocktailDino3.png", ], #cocktail dino
 ["Sprites/Dinosaur/DolphinDino1.png", "Sprites/Dinosaur/DolphinDino2.png", "Sprites/Dinosaur/DolphinDino1.png", ], #dolphin dino
-["Sprites/Dinosaur/SpiderDino1.png", "Sprites/Dinosaur/SpiderDino2.png", "Sprites/Dinosaur/SpiderDino3.png"], #spider dini
-["Sprites/Dinosaur/GhostDino1.png", "Sprites/Dinosaur/GhostDino2.png", "Sprites/Dinosaur/GhostDino1.png"] #ghost dino
+["Sprites/Dinosaur/SpiderDino1.png", "Sprites/Dinosaur/SpiderDino2.png", "Sprites/Dinosaur/SpiderDino3.png"], #spider dino
+["Sprites/Dinosaur/GhostDino1.png", "Sprites/Dinosaur/GhostDino2.png", "Sprites/Dinosaur/GhostDino1.png"], #ghost dino
+["Sprites/Dinosaur/MLGDino1.png", "Sprites/Dinosaur/MLGDino2.png", "Sprites/Dinosaur/MLGDino3.png"]
 ]
 currentDino = 0
+
+displayedSprites = [dinoChoices[i][1] for i in range(len(dinoChoices))] #list comprehension, adds the second item in every array within the larger array
 
 #sounds
 jumpSound = pygame.mixer.Sound("Sound/Sound effects/LVLDJUMP.wav")
@@ -208,9 +211,6 @@ def dinoCustomization():
     global currentDino
 
     screen.fill((255,255,255)) 
-    displayedSprites = ["Sprites/Dinosaur/DefaultDino2.png", "Sprites/Dinosaur/AussieDino2.png", 
-    "Sprites/Dinosaur/E-Dino2.png", "Sprites/Dinosaur/CocktailDino2.png", "Sprites/Dinosaur/DolphinDino2.png", 
-    "Sprites/Dinosaur/SpiderDino2.png", "Sprites/Dinosaur/GhostDino2.png"]
 
     y = 1
     x = 0
@@ -263,6 +263,11 @@ def dinoCustomization():
             if mousePressed(100, 220, 100, 100):
                 currentDino = 6
                 print(currentDino)
+
+            if mousePressed(300, 220, 100, 100):
+                currentDino = 7
+                print(currentDino)
+
 
 
     pygame.display.update()
