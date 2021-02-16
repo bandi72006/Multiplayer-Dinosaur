@@ -1,7 +1,6 @@
 #todo list:
 #add comments so it's readable (duh)
-#Collision is wack sometimes, needs to be fixed
-#Add a quit button to death screen
+#Add box around chosen dino
 #Sprites/animations:
 #    .RGB Dino
 #Spacebar held frames for jump height
@@ -41,7 +40,6 @@ displayedSprites = [dinoChoices[i][1] for i in range(len(dinoChoices))] #list co
 #sounds
 jumpSound = pygame.mixer.Sound("Sound/Sound effects/LVLDJUMP.wav")
 deathSound = pygame.mixer.Sound("Sound/Sound effects/LVLDDEATH.wav")
-pygame.mixer.music.load('Sound/Music/BeepBox-Song.mp3')
 
 #Sets up FPS manager to keep it at 30 always
 fpsClock = pygame.time.Clock()
@@ -124,6 +122,8 @@ def main():
     highScore = highScoreFile.read()
     highScoreFile.close()
 
+
+    pygame.mixer.music.load('Sound/Music/BeepBox-Song.mp3')
     pygame.mixer.music.play(-1) #-1 plays it infinitely
 
     while run:
@@ -206,19 +206,20 @@ def main():
                 break
     
 def dinoCustomization():
-
     global gameState
     global currentDino
 
     screen.fill((255,255,255)) 
 
+    #pygame.draw.line(screen, (255, 0, 0), ((x*200)+90, (int(currentDino/5)*110)+90), ((x*200)+90, (int(currentDino/5)*110)+210), width = 5) #rectangle around chosen dino
+
     y = 1
     x = 0
-
     for i in range(len(displayedSprites)):
         currentSprite = pygame.image.load(displayedSprites[i])
         screen.blit(currentSprite, ((x*200)+100, y*110))   #200 pixels between each dino + 100 offset from edge of screen
         x += 1
+
         if (x*200)+100 > 1280:
             y += 1
             x = 0
@@ -233,28 +234,24 @@ def dinoCustomization():
 
             #exit button code
             if mousePressed(10, 10, 50, 50):
+                pygame.mixer.music.stop()
                 gameState = "deathMenu"
 
             #A bunch of if statements checking if mouse is clicked on certain dino
             if mousePressed(100, 110, 100, 100):
                 currentDino = 0 
-                print(currentDino)
 
             if mousePressed(300, 110, 100, 100):
                 currentDino = 1 
-                print(currentDino)
 
             if mousePressed(500, 110, 100, 100):
                 currentDino = 2 
-                print(currentDino)
 
             if mousePressed(700, 110, 100, 100):
                 currentDino = 3 
-                print(currentDino)
 
             if mousePressed(900, 110, 100, 100):
                 currentDino = 4 
-                print(currentDino)
 
             if mousePressed(1100, 110, 100, 100):
                 currentDino = 5
@@ -262,13 +259,9 @@ def dinoCustomization():
 
             if mousePressed(100, 220, 100, 100):
                 currentDino = 6
-                print(currentDino)
 
             if mousePressed(300, 220, 100, 100):
                 currentDino = 7
-                print(currentDino)
-
-
 
     pygame.display.update()
 
@@ -295,6 +288,8 @@ def deathMenu():
                 gameState = "play"
 
             elif mousePressed((1280/2)-(100/2), 720/2+10, 100, 50):
+                pygame.mixer.music.load("Sound/Music/DinoCustomization.mp3")
+                pygame.mixer.music.play(-1) #-1 plays it infinitely
                 gameState = "dinoCustomization"
 
             else:
