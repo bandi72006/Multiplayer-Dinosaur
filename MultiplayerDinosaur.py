@@ -273,6 +273,10 @@ def dinoCustomization():
 def deathMenu():
     global gameState
 
+    if pygame.mixer.music.get_busy() == False:
+        pygame.mixer.music.load("Sound/Music/Rock_type_beep.mp3")
+        pygame.mixer.music.play(-1) #-1 plays it infinitely
+    
     screen.fill((255,255,255)) 
     pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), (720/2)-50, 100, 50)) #replay button
     pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), 720/2+10, 100, 50)) #dino customization button
