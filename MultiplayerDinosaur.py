@@ -60,7 +60,7 @@ class cactusObject:
         self.order = i #important for calculating distance between each cacti
   
     def move(self, cacti, speed):
-        if (self.x+self.type[0]) < 0:  # +self.type[0] part so it waits until it's completely off screen then moves it back
+        if (self.x+self.type[0]) < -10:  # +self.type[0] part so it waits until it's completely off screen then moves it back
             self.x = 1280
 
             for cactus in cacti:
