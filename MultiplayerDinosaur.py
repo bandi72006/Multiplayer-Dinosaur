@@ -35,6 +35,10 @@ dinoChoices = [["Sprites/Dinosaur/DefaultDino1.png","Sprites/Dinosaur/DefaultDin
 ["Sprites/Dinosaur/GhostDino1.png", "Sprites/Dinosaur/GhostDino2.png", "Sprites/Dinosaur/GhostDino1.png", "Ghost Dino"], #ghost dino
 ["Sprites/Dinosaur/MLGDino1.png", "Sprites/Dinosaur/MLGDino2.png", "Sprites/Dinosaur/MLGDino3.png", "MLG Dino"]
 ]
+
+backgroundImage = pygame.image.load("Sprites/Background/FullBackground.png")
+
+
 currentDino = 0
 
 displayedSprites = [dinoChoices[i][1] for i in range(len(dinoChoices))] #list comprehension, adds the second item in every array within the larger array
@@ -163,8 +167,7 @@ def main():
                 yVel = int((yVel - 30)*0.7) #-30 part so it's always psitiive and falls down
 
 
-        #drawing stuff    
-
+        #dino animatioin   
         animationFrame += 1
         if animationFrame % 4 == 0:    #If statement so every new frame, the sprite is changed
             currentSprite = pygame.image.load(dinoChoices[currentDino][0])
@@ -175,7 +178,12 @@ def main():
         else:
             currentSprite = pygame.image.load(dinoChoices[currentDino][1])
 
-        screen.fill((255,255,255)) 
+        #CLEAR SCREEN          ALL DRAWNIG MUST GO BELOW HERE! VVVVVVV
+
+        #background drawing
+        screen.blit(backgroundImage, ((-animationFrame)*gameSpeed,0))
+
+        #sprite drawings
         screen.blit(currentSprite, (200, yPos))
         screen.blit(scoreText, (1100, 25))
         screen.blit(highScoreText, (1200, 25))
