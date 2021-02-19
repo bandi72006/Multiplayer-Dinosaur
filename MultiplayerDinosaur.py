@@ -33,7 +33,8 @@ dinoChoices = [["Sprites/Dinosaur/DefaultDino1.png","Sprites/Dinosaur/DefaultDin
 ["Sprites/Dinosaur/DolphinDino1.png", "Sprites/Dinosaur/DolphinDino2.png", "Sprites/Dinosaur/DolphinDino1.png", "Dolphin Dino"], #dolphin dino
 ["Sprites/Dinosaur/SpiderDino1.png", "Sprites/Dinosaur/SpiderDino2.png", "Sprites/Dinosaur/SpiderDino3.png", "Spider Dino"], #spider dino
 ["Sprites/Dinosaur/GhostDino1.png", "Sprites/Dinosaur/GhostDino2.png", "Sprites/Dinosaur/GhostDino1.png", "Ghost Dino"], #ghost dino
-["Sprites/Dinosaur/MLGDino1.png", "Sprites/Dinosaur/MLGDino2.png", "Sprites/Dinosaur/MLGDino3.png", "MLG Dino"]
+["Sprites/Dinosaur/MLGDino1.png", "Sprites/Dinosaur/MLGDino2.png", "Sprites/Dinosaur/MLGDino3.png", "MLG Dino"], #MLG dino
+["Sprites/Dinosaur/SteveDino1.png", "Sprites/Dinosaur/SteveDino2.png", "Sprites/Dinosaur/SteveDino3.png", "Steve Dino"]  #Steve dino
 ]
 
 backgroundImage = pygame.image.load("Sprites/Background/FullBackground.png")
@@ -61,7 +62,7 @@ class cactusObject:
   
     def move(self, cacti, speed):
         if (self.x+self.type[0]) < -10:  # +self.type[0] part so it waits until it's completely off screen then moves it back
-            self.x = 1280
+            self.x = 1500
 
             for cactus in cacti:
                 if cactus == self:
@@ -182,6 +183,10 @@ def main():
 
         #background drawing
         screen.blit(backgroundImage, ((-animationFrame)*gameSpeed,0))
+        screen.blit(backgroundImage, ((-animationFrame)*gameSpeed+2560,0)) #second image behind first one so it isnt white
+
+        if animationFrame*gameSpeed >= 2560: #so that the background is infinte and will move back to beginning
+            animationFrame = 0
 
         #sprite drawings
         screen.blit(currentSprite, (200, yPos))
@@ -273,6 +278,9 @@ def dinoCustomization():
 
             if mousePressed(300, 300, 100, 100):
                 currentDino = 7
+
+            if mousePressed(500, 300, 100, 100):
+                currentDino = 8
 
     pygame.display.update()
 
