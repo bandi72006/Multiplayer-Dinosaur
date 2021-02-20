@@ -20,11 +20,15 @@ pygame.display.set_caption("MultiplayerDinosaur")
 
 font = pygame.font.Font('freesansbold.ttf',25)
 menuFont = pygame.font.Font('Sprites/Fonts/menuFont.ttf', 17)
+titleFont = pygame.font.Font("Sprites/Fonts/menuFont.ttf", 35)
 dinoNameFont = pygame.font.Font('Sprites/Fonts/menuFont.ttf', 10)
-retryText = menuFont.render("Retry", True, (255,255,255))
+titleTextTop = titleFont.render("Multiplayer", True, (0,0,0))
+titleTextBottom = titleFont.render("Dino", True, (0,0,0))
+
+retryText = menuFont.render("Play", True, (255,255,255))
 changeDinoText = menuFont.render("Change", True, (255,255,255))
 
-gameState = "deathMenu"
+gameState = "mainMenu"
 
 dinoChoices = [["Sprites/Dinosaur/DefaultDino1.png","Sprites/Dinosaur/DefaultDino2.png","Sprites/Dinosaur/DefaultDino3.png", "Default Dino"], #Normal/default dino
 ["Sprites/Dinosaur/AussieDino1.png", "Sprites/Dinosaur/AussieDino2.png", "Sprites/Dinosaur/AussieDino3.png", "Aussie Dino"],  #Aussie dino
@@ -39,6 +43,7 @@ dinoChoices = [["Sprites/Dinosaur/DefaultDino1.png","Sprites/Dinosaur/DefaultDin
 
 backgroundImage = pygame.image.load("Sprites/Background/FullBackground.png")
 
+animationFrame = 0
 
 currentDino = 0
 
@@ -223,8 +228,18 @@ def main():
 def dinoCustomization():
     global gameState
     global currentDino
+    global animationFrame
 
     screen.fill((255,255,255)) 
+
+    #scrolling background
+    screen.blit(backgroundImage, (-animationFrame,0))
+    screen.blit(backgroundImage, ((-animationFrame+2560),0)) #second image behind first one so it isnt white
+
+    animationFrame += 0.5
+
+    if animationFrame >= 2560: #so that the background is infinte and will move back to beginning
+        animationFrame = 0
 
     y = 1
     x = 0
@@ -251,7 +266,7 @@ def dinoCustomization():
             #exit button code
             if mousePressed(10, 10, 50, 50):
                 pygame.mixer.music.stop()
-                gameState = "deathMenu"
+                gameState = "mainMenu"
 
             #A bunch of if statements checking if mouse is clicked on certain dino
             if mousePressed(100, 150, 100, 100):
@@ -286,19 +301,34 @@ def dinoCustomization():
 
 
 
-def deathMenu():
+def mainMenu():
     global gameState
+    global animationFrame
 
     if pygame.mixer.music.get_busy() == False:
         pygame.mixer.music.load("Sound/Music/Rock_type_beep.mp3")
         pygame.mixer.music.play(-1) #-1 plays it infinitely
     
-    screen.fill((255,255,255)) 
-    pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), (720/2)-50, 100, 50)) #replay button
-    pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), 720/2+10, 100, 50)) #dino customization button
+    screen.fill((255,255,255))
 
+    #scrolling background
+    screen.blit(backgroundImage, (-animationFrame,0))
+    screen.blit(backgroundImage, ((-animationFrame+2560),0)) #second image behind first one so it isnt white
+
+    animationFrame += 0.5
+
+    if animationFrame >= 2560: #so that the background is infinte and will move back to beginning
+        animationFrame = 0
+
+    pygame.draw.rect(screen, (255,255,255), ((1280/2)-210, 180, 420, 360)) #white rectangle behind all text
+
+    pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), (720/2)-50, 100, 50)) #replay button
+    pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), 400, 100, 50)) #dino customization button
+
+    screen.blit(titleTextTop, ((1280/2)-190, 200))  #title text "multiplayer" part
+    screen.blit(titleTextBottom, ((1280/2)-70, 240))  #title text "dino" part
     screen.blit(retryText, ((1280/2)-(100/2)+10, (720/2)-35)) #retry text on button
-    screen.blit(changeDinoText, ((1280/2)-(100/2), (720/2)+25)) #change dino text on the button
+    screen.blit(changeDinoText, ((1280/2)-(100/2), 415)) #change dino text on the button
 
     pygame.display.update()
 
@@ -312,13 +342,13 @@ def deathMenu():
             if mousePressed((1280/2)-(100/2), (720/2)-50, 100, 50):
                 gameState = "play"
 
-            elif mousePressed((1280/2)-(100/2), 720/2+10, 100, 50):
+            elif mousePressed((1280/2)-(100/2), 415, 100, 50):
                 pygame.mixer.music.load("Sound/Music/DinoCustomization.mp3")
                 pygame.mixer.music.play(-1) #-1 plays it infinitely
                 gameState = "dinoCustomization"
 
             else:
-                gameState = "deathMenu"
+                gameState = "mainMenu"
 
 while True:
     for event in pygame.event.get():
@@ -327,10 +357,10 @@ while True:
 
     if gameState == "play":
         main()
-        gameState = "deathMenu"
+        gameState = "mainMenu"
         
-    if gameState == "deathMenu":
-        deathMenu()
+    if gameState == "mainMenu":
+        mainMenu()
 
     if gameState == "dinoCustomization":
         dinoCustomization()
