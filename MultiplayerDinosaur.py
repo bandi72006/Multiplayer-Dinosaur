@@ -250,7 +250,7 @@ def dinoCustomization():
     for i in range(len(displayedSprites)):
         currentSprite = pygame.image.load(displayedSprites[i])
         screen.blit(currentSprite, ((x*200)+100, y*150))   #200 pixels between each dino + 100 offset from edge of screen
-        dinoNameText = dinoNameFont.render(dinoChoices[i][3], True, (0,0,0))
+        dinoNameText = dinoNameFont.render(dinoChoices[i][3], True, ((y*255)-255, (y*255)-255, (y*255)-255))
         screen.blit(dinoNameText, ((x*200)+100, (y*150)+120)) 
         
         x += 1
