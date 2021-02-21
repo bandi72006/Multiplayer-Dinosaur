@@ -5,6 +5,7 @@
 #    .RGB Dino
 #Spacebar held frames for jump height
 #Add speed cap
+#FIX DISTANCE BETWEEN CACTI WITH ABS()
 
 #Game music by: Lee
 
@@ -38,7 +39,10 @@ dinoChoices = [["Sprites/Dinosaur/DefaultDino1.png","Sprites/Dinosaur/DefaultDin
 ["Sprites/Dinosaur/SpiderDino1.png", "Sprites/Dinosaur/SpiderDino2.png", "Sprites/Dinosaur/SpiderDino3.png", "Spider Dino"], #spider dino
 ["Sprites/Dinosaur/GhostDino1.png", "Sprites/Dinosaur/GhostDino2.png", "Sprites/Dinosaur/GhostDino1.png", "Ghost Dino"], #ghost dino
 ["Sprites/Dinosaur/MLGDino1.png", "Sprites/Dinosaur/MLGDino2.png", "Sprites/Dinosaur/MLGDino3.png", "MLG Dino"], #MLG dino
-["Sprites/Dinosaur/SteveDino1.png", "Sprites/Dinosaur/SteveDino2.png", "Sprites/Dinosaur/SteveDino3.png", "Steve Dino"]  #Steve dino
+["Sprites/Dinosaur/SteveDino1.png", "Sprites/Dinosaur/SteveDino2.png", "Sprites/Dinosaur/SteveDino3.png", "Steve Dino"],  #Steve dino
+["Sprites/Dinosaur/AlexDino1.png", "Sprites/Dinosaur/AlexDino2.png", "Sprites/Dinosaur/AlexDino3.png", "Alex Dino"], #Alex Dino (from minecraft)
+["Sprites/Dinosaur/DreamDino1.png", "Sprites/Dinosaur/DreamDino2.png", "Sprites/Dinosaur/DreamDino3.png", "Dream Dino"], #Dream Dino (minecraft youtuber)
+["Sprites/Dinosaur/AnimeDino1.png", "Sprites/Dinosaur/AnimeDino2.png", "Sprites/Dinosaur/AnimeDino3.png", "Anime Dino"] #Anime Dino
 ]
 
 backgroundImage = pygame.image.load("Sprites/Background/FullBackground.png")
@@ -286,7 +290,6 @@ def dinoCustomization():
 
             if mousePressed(1100, 150, 100, 100):
                 currentDino = 5
-                print(currentDino)
 
             if mousePressed(100, 300, 100, 100):
                 currentDino = 6
@@ -296,6 +299,15 @@ def dinoCustomization():
 
             if mousePressed(500, 300, 100, 100):
                 currentDino = 8
+
+            if mousePressed(700, 300, 100, 100):
+                currentDino = 9
+            
+            if mousePressed(900, 300, 100, 100):
+                currentDino = 10
+            
+            if mousePressed(1100, 300, 100, 100):
+                currentDino = 11
 
     pygame.display.update()
 
