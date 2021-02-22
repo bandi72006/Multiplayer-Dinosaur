@@ -49,7 +49,9 @@ backgroundImage = pygame.image.load("Sprites/Background/FullBackground.png")
 
 animationFrame = 0
 
-currentDino = 0
+playerSettingsFile = open("playerSettings.txt", "r")
+currentDino = int(playerSettingsFile.readline())
+playerSettingsFile.close()
 
 displayedSprites = [dinoChoices[i][1] for i in range(len(dinoChoices))] #list comprehension, adds the second item in every array within the larger array
 
@@ -250,7 +252,7 @@ def dinoCustomization():
     for i in range(len(displayedSprites)):
         currentSprite = pygame.image.load(displayedSprites[i])
         screen.blit(currentSprite, ((x*200)+100, y*150))   #200 pixels between each dino + 100 offset from edge of screen
-        dinoNameText = dinoNameFont.render(dinoChoices[i][3], True, ((y*255)-255, (y*255)-255, (y*255)-255))
+        dinoNameText = dinoNameFont.render(dinoChoices[i][3], True, ((0 if y < 2 else 255), (0 if y < 2 else 255), (0 if y < 2 else 255))) #Ternary operator to set correct font colour
         screen.blit(dinoNameText, ((x*200)+100, (y*150)+120)) 
         
         x += 1
@@ -308,6 +310,12 @@ def dinoCustomization():
             
             if mousePressed(1100, 300, 100, 100):
                 currentDino = 11
+
+            playerSettingsFile = open("playerSettings.txt", "w")
+            playerSettingsFile.write(str(currentDino))
+            playerSettingsFile.close()
+
+
 
     pygame.display.update()
 
