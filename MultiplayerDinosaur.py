@@ -263,6 +263,81 @@ def dinoCustomization():
 
     pygame.draw.rect(screen, (255, 0, 0), (10, 10, 50, 50)) #exit button
 
+    #box around dino code
+    if currentDino == 0:
+        pygame.draw.line(screen, (255,0,0),(90,140),(90,260), width = 3)
+        pygame.draw.line(screen, (255,0,0),(90,140),(210,140), width = 3)
+        pygame.draw.line(screen, (255,0,0),(210,140),(210,260), width = 3)
+        pygame.draw.line(screen, (255,0,0),(90,260),(210,260), width = 3)
+
+    if currentDino == 1:
+        pygame.draw.line(screen, (255,0,0),(290,140),(290,260), width = 3)
+        pygame.draw.line(screen, (255,0,0),(290,140),(410,140), width = 3)
+        pygame.draw.line(screen, (255,0,0),(410,140),(410,260), width = 3)
+        pygame.draw.line(screen, (255,0,0),(290,260),(410,260), width = 3)
+
+    if currentDino == 2:
+        pygame.draw.line(screen, (255,0,0),(490,140),(490,260), width = 3)
+        pygame.draw.line(screen, (255,0,0),(490,140),(610,140), width = 3)
+        pygame.draw.line(screen, (255,0,0),(610,140),(610,260), width = 3)
+        pygame.draw.line(screen, (255,0,0),(490,260),(610,260), width = 3)
+    
+    if currentDino == 3:
+        pygame.draw.line(screen, (255,0,0),(690,140),(690,260), width = 3)
+        pygame.draw.line(screen, (255,0,0),(690,140),(810,140), width = 3)
+        pygame.draw.line(screen, (255,0,0),(810,140),(810,260), width = 3)
+        pygame.draw.line(screen, (255,0,0),(690,260),(810,260), width = 3)
+
+    if currentDino == 4:
+        pygame.draw.line(screen, (255,0,0),(890,140),(890,260), width = 3)
+        pygame.draw.line(screen, (255,0,0),(890,140),(1010,140), width = 3)
+        pygame.draw.line(screen, (255,0,0),(1010,140),(1010,260), width = 3)
+        pygame.draw.line(screen, (255,0,0),(890,260),(1010,260), width = 3)
+
+    if currentDino == 5:
+        pygame.draw.line(screen, (255,0,0),(1090,140),(1090,260), width = 3)
+        pygame.draw.line(screen, (255,0,0),(1090,140),(1210,140), width = 3)
+        pygame.draw.line(screen, (255,0,0),(1210,140),(1210,260), width = 3)
+        pygame.draw.line(screen, (255,0,0),(1090,260),(1210,260), width = 3)
+
+
+    if currentDino == 6:
+        pygame.draw.line(screen, (255,0,0),(90,290),(90,410), width = 3)
+        pygame.draw.line(screen, (255,0,0),(90,290),(210,290), width = 3)
+        pygame.draw.line(screen, (255,0,0),(210,290),(210,410), width = 3)
+        pygame.draw.line(screen, (255,0,0),(90,410),(210,410), width = 3)
+
+    if currentDino == 7:
+        pygame.draw.line(screen, (255,0,0),(290,290),(290,410), width = 3)
+        pygame.draw.line(screen, (255,0,0),(290,290),(410,290), width = 3)
+        pygame.draw.line(screen, (255,0,0),(410,290),(410,410), width = 3)
+        pygame.draw.line(screen, (255,0,0),(290,410),(410,410), width = 3)
+        
+    if currentDino == 8:
+        pygame.draw.line(screen, (255,0,0),(490,290),(490,410), width = 3)
+        pygame.draw.line(screen, (255,0,0),(490,290),(610,290), width = 3)
+        pygame.draw.line(screen, (255,0,0),(610,290),(610,410), width = 3)
+        pygame.draw.line(screen, (255,0,0),(490,410),(610,410), width = 3)
+
+    if currentDino == 9:
+        pygame.draw.line(screen, (255,0,0),(690,290),(690,410), width = 3)
+        pygame.draw.line(screen, (255,0,0),(690,290),(810,290), width = 3)
+        pygame.draw.line(screen, (255,0,0),(810,290),(810,410), width = 3)
+        pygame.draw.line(screen, (255,0,0),(690,410),(810,410), width = 3)
+
+    if currentDino == 10:
+        pygame.draw.line(screen, (255,0,0),(890,290),(890,410), width = 3)
+        pygame.draw.line(screen, (255,0,0),(890,290),(1010,290), width = 3)
+        pygame.draw.line(screen, (255,0,0),(1010,290),(1010,410), width = 3)
+        pygame.draw.line(screen, (255,0,0),(890,410),(1010,410), width = 3)
+
+    if currentDino == 11:
+        pygame.draw.line(screen, (255,0,0),(1090,290),(1090,410), width = 3)
+        pygame.draw.line(screen, (255,0,0),(1090,290),(1210,290), width = 3)
+        pygame.draw.line(screen, (255,0,0),(1210,290),(1210,410), width = 3)
+        pygame.draw.line(screen, (255,0,0),(1090,410),(1210,410), width = 3)
+
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
