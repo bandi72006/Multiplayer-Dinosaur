@@ -1,3 +1,6 @@
+#Bandar Al Aish
+#main game code
+
 #todo list:
 #add comments so it's readable (duh)
 #Add box around chosen dino
@@ -11,7 +14,8 @@
 
 import pygame
 import random
-from pygame import mouse
+from Player import *
+player = Player()
 
 from pygame.constants import MOUSEBUTTONDOWN
 
@@ -31,27 +35,9 @@ changeDinoText = menuFont.render("Change", True, (255,255,255))
 
 gameState = "mainMenu"
 
-dinoChoices = [["Sprites/Dinosaur/DefaultDino1.png","Sprites/Dinosaur/DefaultDino2.png","Sprites/Dinosaur/DefaultDino3.png", "Default Dino"], #Normal/default dino
-["Sprites/Dinosaur/AussieDino1.png", "Sprites/Dinosaur/AussieDino2.png", "Sprites/Dinosaur/AussieDino3.png", "Aussie Dino"],  #Aussie dino
-["Sprites/Dinosaur/E-Dino1.png", "Sprites/Dinosaur/E-Dino2.png", "Sprites/Dinosaur/E-Dino3.png", "E-Dino"], #E-dino
-["Sprites/Dinosaur/CocktailDino1.png", "Sprites/Dinosaur/CocktailDino2.png", "Sprites/Dinosaur/CocktailDino3.png", "Cocktail Dino"], #cocktail dino
-["Sprites/Dinosaur/DolphinDino1.png", "Sprites/Dinosaur/DolphinDino2.png", "Sprites/Dinosaur/DolphinDino1.png", "Dolphin Dino"], #dolphin dino
-["Sprites/Dinosaur/SpiderDino1.png", "Sprites/Dinosaur/SpiderDino2.png", "Sprites/Dinosaur/SpiderDino3.png", "Spider Dino"], #spider dino
-["Sprites/Dinosaur/GhostDino1.png", "Sprites/Dinosaur/GhostDino2.png", "Sprites/Dinosaur/GhostDino1.png", "Ghost Dino"], #ghost dino
-["Sprites/Dinosaur/MLGDino1.png", "Sprites/Dinosaur/MLGDino2.png", "Sprites/Dinosaur/MLGDino3.png", "MLG Dino"], #MLG dino
-["Sprites/Dinosaur/SteveDino1.png", "Sprites/Dinosaur/SteveDino2.png", "Sprites/Dinosaur/SteveDino3.png", "Steve Dino"],  #Steve dino
-["Sprites/Dinosaur/AlexDino1.png", "Sprites/Dinosaur/AlexDino2.png", "Sprites/Dinosaur/AlexDino3.png", "Alex Dino"], #Alex Dino (from minecraft)
-["Sprites/Dinosaur/DreamDino1.png", "Sprites/Dinosaur/DreamDino2.png", "Sprites/Dinosaur/DreamDino3.png", "Dream Dino"], #Dream Dino (minecraft youtuber)
-["Sprites/Dinosaur/AnimeDino1.png", "Sprites/Dinosaur/AnimeDino2.png", "Sprites/Dinosaur/AnimeDino3.png", "Anime Dino"] #Anime Dino
-]
-
 backgroundImage = pygame.image.load("Sprites/Background/FullBackground.png")
 
 animationFrame = 0
-
-playerSettingsFile = open("playerSettings.txt", "r")
-currentDino = int(playerSettingsFile.readline())
-playerSettingsFile.close()
 
 displayedSprites = [dinoChoices[i][1] for i in range(len(dinoChoices))] #list comprehension, adds the second item in every array within the larger array
 
@@ -97,19 +83,6 @@ class cactusObject:
     def draw(self):
         pygame.draw.rect(screen, (100,255,100), (self.x, self.y, self.type[0], self.type[1]))
 
-    
-def Jump(yValue, Vel, isjumpbool):
-    #CREDITS TO: AndSans for the jumping mechanics!
-
-    if isjumpbool == True:
-        if yValue < 451: #One more than the ground level
-            Vel -= 2
-            yValue -= Vel  
-    
-    else:
-        yValue = 450          
-    
-    return yValue, Vel
 
 def mousePressed(x, y, width, height):
     if pygame.mouse.get_pos()[0] > x and pygame.mouse.get_pos()[0] < x+width: #Checks if x is in between the left and the right of the object
@@ -126,11 +99,7 @@ def main():
     #Creates all cacti objects and stores them in a list
     cacti = [cactusObject(-1000, i) for i in range(3)] #-1000 so it autmoatically gets moved to the beginning
 
-
     #sets some important variables
-    yPos = 450
-    isJump = False
-    yVel = 0
     score = 0 
     run = True
     animationFrame = 1
@@ -151,44 +120,33 @@ def main():
 
 
         #Movement
-        yPos, yVel = Jump(yPos, yVel, isJump)
 
-        if yPos > 450: #keeps yValue always at 450, as if it hit the ground
-            yPos = 450
-            isJump = False
-
-        for cactus in cacti:
-            cactus.move(cacti, gameSpeed)
+        player.jump()
 
         score += int(gameSpeed)
         scoreText = font.render(str(score), True, (0,0,0))
         highScoreText = font.render(str(highScore), True, (0,0,0))
 
+        for cactus in cacti:
+            cactus.move(cacti, gameSpeed)
+
+
         gameSpeed += 0.001
 
         #Input handling
         keys = pygame.key.get_pressed()
-
         if keys[pygame.K_SPACE] or keys[pygame.K_UP]:
-            if isJump == False:
+            if player.isJump == False:
                 pygame.mixer.Sound.play(jumpSound)
-                yVel = 30
-                isJump = True
+                player.yVel = 30
+                player.isJump = True
 
         if keys[pygame.K_DOWN]:
-                yVel = int((yVel - 30)*0.7) #-30 part so it's always psitiive and falls down
+                player.yVel = int((player.yVel - 30)*0.7) #-30 part so it's always psitiive and falls down
 
 
         #dino animatioin   
         animationFrame += 1
-        if animationFrame % 4 == 0:    #If statement so every new frame, the sprite is changed
-            currentSprite = pygame.image.load(dinoChoices[currentDino][0])
-        elif animationFrame % 4 == 1:
-            currentSprite = pygame.image.load(dinoChoices[currentDino][1])
-        elif animationFrame % 4 == 2:
-            currentSprite = pygame.image.load(dinoChoices[currentDino][2])
-        else:
-            currentSprite = pygame.image.load(dinoChoices[currentDino][1])
 
         #CLEAR SCREEN          ALL DRAWNIG MUST GO BELOW HERE! VVVVVVV
 
@@ -200,7 +158,7 @@ def main():
             animationFrame = 0
 
         #sprite drawings
-        screen.blit(currentSprite, (200, yPos))
+        player.draw(animationFrame, screen)
         screen.blit(scoreText, (1100, 25))
         screen.blit(highScoreText, (1200, 25))
         pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))
@@ -218,7 +176,7 @@ def main():
 
         #Collisioin detection AFTER drawing so no visual bugs happen
         for cactus in cacti:
-            if cactus.collided(yPos) == True:
+            if cactus.collided(player.yPos) == True:
                 pygame.mixer.music.stop()
                 pygame.mixer.Sound.play(deathSound)
                 pygame.time.delay(1000)
@@ -233,7 +191,6 @@ def main():
     
 def dinoCustomization():
     global gameState
-    global currentDino
     global animationFrame
 
     screen.fill((255,255,255)) 
@@ -264,74 +221,73 @@ def dinoCustomization():
     pygame.draw.rect(screen, (255, 0, 0), (10, 10, 50, 50)) #exit button
 
     #box around dino code
-    if currentDino == 0:
+    if player.currentDino == 0:
         pygame.draw.line(screen, (255,0,0),(90,140),(90,260), width = 3)
         pygame.draw.line(screen, (255,0,0),(90,140),(210,140), width = 3)
         pygame.draw.line(screen, (255,0,0),(210,140),(210,260), width = 3)
         pygame.draw.line(screen, (255,0,0),(90,260),(210,260), width = 3)
 
-    if currentDino == 1:
+    if player.currentDino == 1:
         pygame.draw.line(screen, (255,0,0),(290,140),(290,260), width = 3)
         pygame.draw.line(screen, (255,0,0),(290,140),(410,140), width = 3)
         pygame.draw.line(screen, (255,0,0),(410,140),(410,260), width = 3)
         pygame.draw.line(screen, (255,0,0),(290,260),(410,260), width = 3)
 
-    if currentDino == 2:
+    if player.currentDino == 2:
         pygame.draw.line(screen, (255,0,0),(490,140),(490,260), width = 3)
         pygame.draw.line(screen, (255,0,0),(490,140),(610,140), width = 3)
         pygame.draw.line(screen, (255,0,0),(610,140),(610,260), width = 3)
         pygame.draw.line(screen, (255,0,0),(490,260),(610,260), width = 3)
     
-    if currentDino == 3:
+    if player.currentDino == 3:
         pygame.draw.line(screen, (255,0,0),(690,140),(690,260), width = 3)
         pygame.draw.line(screen, (255,0,0),(690,140),(810,140), width = 3)
         pygame.draw.line(screen, (255,0,0),(810,140),(810,260), width = 3)
         pygame.draw.line(screen, (255,0,0),(690,260),(810,260), width = 3)
 
-    if currentDino == 4:
+    if player.currentDino == 4:
         pygame.draw.line(screen, (255,0,0),(890,140),(890,260), width = 3)
         pygame.draw.line(screen, (255,0,0),(890,140),(1010,140), width = 3)
         pygame.draw.line(screen, (255,0,0),(1010,140),(1010,260), width = 3)
         pygame.draw.line(screen, (255,0,0),(890,260),(1010,260), width = 3)
 
-    if currentDino == 5:
+    if player.currentDino == 5:
         pygame.draw.line(screen, (255,0,0),(1090,140),(1090,260), width = 3)
         pygame.draw.line(screen, (255,0,0),(1090,140),(1210,140), width = 3)
         pygame.draw.line(screen, (255,0,0),(1210,140),(1210,260), width = 3)
         pygame.draw.line(screen, (255,0,0),(1090,260),(1210,260), width = 3)
 
-
-    if currentDino == 6:
+    if player.currentDino == 6:
         pygame.draw.line(screen, (255,0,0),(90,290),(90,410), width = 3)
         pygame.draw.line(screen, (255,0,0),(90,290),(210,290), width = 3)
         pygame.draw.line(screen, (255,0,0),(210,290),(210,410), width = 3)
         pygame.draw.line(screen, (255,0,0),(90,410),(210,410), width = 3)
 
-    if currentDino == 7:
+    if player.currentDino == 7:
         pygame.draw.line(screen, (255,0,0),(290,290),(290,410), width = 3)
         pygame.draw.line(screen, (255,0,0),(290,290),(410,290), width = 3)
         pygame.draw.line(screen, (255,0,0),(410,290),(410,410), width = 3)
         pygame.draw.line(screen, (255,0,0),(290,410),(410,410), width = 3)
         
-    if currentDino == 8:
+    if player.currentDino == 8:
         pygame.draw.line(screen, (255,0,0),(490,290),(490,410), width = 3)
         pygame.draw.line(screen, (255,0,0),(490,290),(610,290), width = 3)
         pygame.draw.line(screen, (255,0,0),(610,290),(610,410), width = 3)
         pygame.draw.line(screen, (255,0,0),(490,410),(610,410), width = 3)
 
-    if currentDino == 9:
+    if player.currentDino == 9:
         pygame.draw.line(screen, (255,0,0),(690,290),(690,410), width = 3)
         pygame.draw.line(screen, (255,0,0),(690,290),(810,290), width = 3)
         pygame.draw.line(screen, (255,0,0),(810,290),(810,410), width = 3)
         pygame.draw.line(screen, (255,0,0),(690,410),(810,410), width = 3)
 
-    if currentDino == 10:
+    if player.currentDino == 10:
         pygame.draw.line(screen, (255,0,0),(890,290),(890,410), width = 3)
         pygame.draw.line(screen, (255,0,0),(890,290),(1010,290), width = 3)
         pygame.draw.line(screen, (255,0,0),(1010,290),(1010,410), width = 3)
         pygame.draw.line(screen, (255,0,0),(890,410),(1010,410), width = 3)
 
-    if currentDino == 11:
+    if player.currentDino == 11:
         pygame.draw.line(screen, (255,0,0),(1090,290),(1090,410), width = 3)
         pygame.draw.line(screen, (255,0,0),(1090,290),(1210,290), width = 3)
         pygame.draw.line(screen, (255,0,0),(1210,290),(1210,410), width = 3)
@@ -351,43 +307,43 @@ def dinoCustomization():
 
             #A bunch of if statements checking if mouse is clicked on certain dino
             if mousePressed(100, 150, 100, 100):
-                currentDino = 0 
+                player.currentDino = 0 
 
             if mousePressed(300, 150, 100, 100):
-                currentDino = 1 
+                player.currentDino = 1 
 
             if mousePressed(500, 150, 100, 100):
-                currentDino = 2 
+                player.currentDino = 2 
 
             if mousePressed(700, 150, 100, 100):
-                currentDino = 3 
+                player.currentDino = 3 
 
             if mousePressed(900, 150, 100, 100):
-                currentDino = 4 
+                player.currentDino = 4 
 
             if mousePressed(1100, 150, 100, 100):
-                currentDino = 5
+                player.currentDino = 5
 
             if mousePressed(100, 300, 100, 100):
-                currentDino = 6
+                player.currentDino = 6
 
             if mousePressed(300, 300, 100, 100):
-                currentDino = 7
+                player.currentDino = 7
 
             if mousePressed(500, 300, 100, 100):
-                currentDino = 8
+                player.currentDino = 8
 
             if mousePressed(700, 300, 100, 100):
-                currentDino = 9
+                player.currentDino = 9
             
             if mousePressed(900, 300, 100, 100):
-                currentDino = 10
+                player.currentDino = 10
             
             if mousePressed(1100, 300, 100, 100):
-                currentDino = 11
+                player.currentDino = 11
 
             playerSettingsFile = open("playerSettings.txt", "w")
-            playerSettingsFile.write(str(currentDino))
+            playerSettingsFile.write(str(player.currentDino))
             playerSettingsFile.close()
 
 
