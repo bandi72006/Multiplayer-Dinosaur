@@ -142,7 +142,7 @@ def main():
                 player.isJump = True
 
         if keys[pygame.K_DOWN]:
-                player.yVel = int((player.yVel - 30)*0.7) #-30 part so it's always psitiive and falls down
+                player.yVel = (player.yVel - 30)*0.7 #-30 part so it's always psitiive and falls down
 
 
         #dino animatioin   
