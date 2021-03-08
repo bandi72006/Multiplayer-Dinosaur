@@ -1,9 +1,7 @@
 #Bandar Al Aish
-#All code for the dino
+#All code for the opponents aka other dinos on the screen
 
 import pygame
-
-from network import Network
 
 dinoChoices = [["Sprites/Dinosaur/DefaultDino1.png","Sprites/Dinosaur/DefaultDino2.png","Sprites/Dinosaur/DefaultDino3.png", "Default Dino"], #Normal/default dino
 ["Sprites/Dinosaur/AussieDino1.png", "Sprites/Dinosaur/AussieDino2.png", "Sprites/Dinosaur/AussieDino3.png", "Aussie Dino"],  #Aussie dino
@@ -19,35 +17,10 @@ dinoChoices = [["Sprites/Dinosaur/DefaultDino1.png","Sprites/Dinosaur/DefaultDin
 ["Sprites/Dinosaur/AnimeDino1.png", "Sprites/Dinosaur/AnimeDino2.png", "Sprites/Dinosaur/AnimeDino3.png", "Anime Dino"] #Anime Dino
 ]
 
-n = Network()
-
-class Player():
+class Opponent():
     def __init__(self):
         self.yPos = 450
-        self.isJump = False
-        self.yVel = 0
         self.currentSprite = 0
-        
-        playerSettingsFile = open("playerSettings.txt", "r")
-        self.currentDino = int(playerSettingsFile.readline())
-        playerSettingsFile.close()
-
-
-    def jump(self):
-        #CREDITS TO: AndSans for the jumping mechanics!
-
-        if self.isJump == True:
-            if self.yPos < 451: #One more than the ground level
-                self.yVel -= 2
-                self.yPos -= self.yVel  
-        
-        else:
-            self.yPos = 450  
-
-
-        if self.yPos > 450: #keeps yValue always at 450, as if it hit the ground
-            self.yPos = 450
-            self.isJump = False
 
 
     def draw(self, frame, screen):

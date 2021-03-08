@@ -15,7 +15,9 @@
 import pygame
 import random
 from Player import *
+from opponent import *
 player = Player()
+p2 = Player()
 
 from pygame.constants import MOUSEBUTTONDOWN
 
@@ -109,6 +111,9 @@ def main():
     highScore = highScoreFile.read()
     highScoreFile.close()
 
+    n.getPos()
+    p2Pos = n.send(player.yPos)
+
 
     pygame.mixer.music.load('Sound/Music/BeepBox-Song.mp3')
     pygame.mixer.music.play(-1) #-1 plays it infinitely
@@ -130,6 +135,8 @@ def main():
         for cactus in cacti:
             cactus.move(cacti, gameSpeed)
 
+        p2Pos = n.send(player.yPos)
+        print("yeet ion main: ", p2Pos)
 
         gameSpeed += 0.001
 
@@ -159,15 +166,13 @@ def main():
 
         #sprite drawings
         player.draw(animationFrame, screen)
+        #screen.blit(dinoChoices[0][0], (200,int(p2Pos)))
         screen.blit(scoreText, (1100, 25))
         screen.blit(highScoreText, (1200, 25))
         pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))
     
         for cactus in cacti:
             cactus.draw()
-
-
-        #screen.blit(defaultSprite, (640, yPos)) REALLY BIG! DON'T ADD YET!
 
         pygame.display.update()
         
