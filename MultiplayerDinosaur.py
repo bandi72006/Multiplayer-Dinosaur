@@ -15,7 +15,6 @@
 import pygame
 import random
 from Player import *
-from opponent import *
 player = Player()
 p2 = Player()
 
@@ -131,8 +130,7 @@ def main():
         for cactus in cacti:
             cactus.move(cacti, gameSpeed)
 
-        p2Pos = n.send(player.yPos)
-        print("yeet ion main:",p2Pos)
+        p2Pos = n.send(round(player.yPos))
 
         gameSpeed += 0.001
 
@@ -160,9 +158,11 @@ def main():
         if animationFrame*gameSpeed >= 2560: #so that the background is infinte and will move back to beginning
             animationFrame = 0
 
+        currentSpr = pygame.image.load(dinoChoices[0][0])
+
         #sprite drawings
         player.draw(animationFrame, screen)
-        screen.blit(player.currentSprite, (200,int(p2Pos)))
+        screen.blit(currentSpr, (200,int(p2Pos)))
         screen.blit(scoreText, (1100, 25))
         screen.blit(highScoreText, (1200, 25))
         pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))
