@@ -6,7 +6,7 @@ port = 5555 #typically an open port
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #type of connection we are making
 
-#binding socket to server and poort
+#binding socket to server and port
 try:
     s.bind((server, port))
 except socket.error as e:
@@ -39,9 +39,12 @@ def threaded_client(conn, player): #conn = connection
                 print("Received: ", data)
                 print("Sending : ", reply)
 
-            conn.sendall(str.encode(reply))
+            print("ok:  ", reply)
+            conn.sendall(str.encode(str(reply)))
+            print("nok   ", reply)
 
         except:
+            print("oaipdsijpasdi")
             break
 
     print("Lost connection")

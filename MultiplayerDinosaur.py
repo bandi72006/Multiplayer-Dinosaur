@@ -111,10 +111,6 @@ def main():
     highScore = highScoreFile.read()
     highScoreFile.close()
 
-    n.getPos()
-    p2Pos = n.send(player.yPos)
-
-
     pygame.mixer.music.load('Sound/Music/BeepBox-Song.mp3')
     pygame.mixer.music.play(-1) #-1 plays it infinitely
 
@@ -136,7 +132,7 @@ def main():
             cactus.move(cacti, gameSpeed)
 
         p2Pos = n.send(player.yPos)
-        print("yeet ion main: ", p2Pos)
+        print("yeet ion main:",p2Pos)
 
         gameSpeed += 0.001
 
@@ -166,7 +162,7 @@ def main():
 
         #sprite drawings
         player.draw(animationFrame, screen)
-        #screen.blit(dinoChoices[0][0], (200,int(p2Pos)))
+        screen.blit(dinoChoices[0][0], (200,int(p2Pos)))
         screen.blit(scoreText, (1100, 25))
         screen.blit(highScoreText, (1200, 25))
         pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))

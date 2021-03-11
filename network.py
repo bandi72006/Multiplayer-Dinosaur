@@ -21,7 +21,6 @@ class Network:
     def send(self, data):
         try:
             self.client.send(str.encode(str(data)))
-            print(self.client.recv(2048).decode())
             return self.client.recv(2048).decode()
         except socket.error as e:
             print(e)
