@@ -162,7 +162,7 @@ def main():
 
         #sprite drawings
         player.draw(animationFrame, screen)
-        screen.blit(dinoChoices[0][0], (200,int(p2Pos)))
+        screen.blit(player.currentSprite, (200,int(p2Pos)))
         screen.blit(scoreText, (1100, 25))
         screen.blit(highScoreText, (1200, 25))
         pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))
@@ -176,7 +176,7 @@ def main():
         fpsClock.tick(FPS)
 
         #Collisioin detection AFTER drawing so no visual bugs happen
-        for cactus in cacti:
+        """for cactus in cacti:
             if cactus.collided(player.yPos) == True:
                 pygame.mixer.music.stop()
                 pygame.mixer.Sound.play(deathSound)
@@ -188,7 +188,7 @@ def main():
                     highScoreFile.close()
                 
                 run = False
-                break
+                break"""
     
 def dinoCustomization():
     global gameState
