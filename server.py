@@ -15,8 +15,15 @@ except socket.error as e:
 s.listen(2) #opens up port to "listen". Parameter = number of connections
 print("Waiting for connection, server has started")
 
+def arrToString(arr):
+    return str(arr[0]) + "," + str(arr[1])
+
+def stringToArr(str):
+    string = str.split(",")
+    return string[0], string[1]
+
 pos = [450, 450]
-dinoChoices = []
+playerDinoChoices = [0, 0]
 
 def threaded_client(conn, player): #conn = connection
     global currentPlayer
@@ -24,27 +31,26 @@ def threaded_client(conn, player): #conn = connection
     reply = ""
     while True:
         try:
-            data = conn.recv(2048).decode()
-            pos[player] = data
+            data = stringToArr(conn.recv(2048).decode())
+            pos[player] = data[0]
+            playerDinoChoices[player] = data[1]
 
             if not data:
                 print("Disconnected")
                 break
             else:
                 if player == 1:
-                    reply = pos[0]
+                    reply = str(pos[0]) + "," + str(playerDinoChoices[0])
+
                 else:
-                    reply = pos[1]
+                    reply = str(pos[1]) + "," + str(playerDinoChoices[1])
 
                 print("Received: ", data)
                 print("Sending : ", reply)
 
-            print("ok:  ", reply)
             conn.sendall(str.encode(str(reply)))
-            print("nok   ", reply)
 
         except:
-            print("oaipdsijpasdi")
             break
 
     print("Lost connection")

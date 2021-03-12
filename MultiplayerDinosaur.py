@@ -85,6 +85,13 @@ class cactusObject:
         pygame.draw.rect(screen, (100,255,100), (self.x, self.y, self.type[0], self.type[1]))
 
 
+def arrToString(arr):
+    return str(arr[0]) + "," + str(arr[1])
+
+def stringToArr(str):
+    string = str.split(",")
+    return string[0], string[1]
+
 def mousePressed(x, y, width, height):
     if pygame.mouse.get_pos()[0] > x and pygame.mouse.get_pos()[0] < x+width: #Checks if x is in between the left and the right of the object
         if pygame.mouse.get_pos()[1] > y and pygame.mouse.get_pos()[1] < y+height: #Checks if y is in between the top and the bottom of the object
@@ -130,7 +137,9 @@ def main():
         for cactus in cacti:
             cactus.move(cacti, gameSpeed)
 
-        p2Pos = n.send(round(player.yPos))
+        p2Info = stringToArr(n.send(arrToString([round(player.yPos), player.currentDino]))) #sends data as a string, gets back data and converts back to array
+        p2Pos = p2Info[0]
+        p2Dino = p2Info[1]
 
         gameSpeed += 0.001
 
@@ -158,11 +167,18 @@ def main():
         if animationFrame*gameSpeed >= 2560: #so that the background is infinte and will move back to beginning
             animationFrame = 0
 
-        currentSpr = pygame.image.load(dinoChoices[0][0])
+        if animationFrame % 4 == 0:    #If statement so every new frame, the sprite is changed
+            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][0])
+        elif animationFrame % 4 == 1:
+            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1])
+        elif animationFrame % 4 == 2:
+            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][2])
+        else:
+            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1]) 
 
         #sprite drawings
         player.draw(animationFrame, screen)
-        screen.blit(currentSpr, (200,int(p2Pos)))
+        screen.blit(currentSpriteP2, (200,int(p2Pos)))
         screen.blit(scoreText, (1100, 25))
         screen.blit(highScoreText, (1200, 25))
         pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))
