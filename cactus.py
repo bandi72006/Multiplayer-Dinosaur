@@ -13,14 +13,14 @@ class Cactus:
         self.order = i #important for calculating distance between each cacti
   
     def move(self, cacti, speed):
-        if (self.x+self.type[0]) < -10:  # +self.type[0] part so it waits until it's completely off screen then moves it back
+        if (self.x+self.type[0]) < 0:  # +self.type[0] part so it waits until it's completely off screen then moves it back
             self.x = 1500
 
             for cactus in cacti:
                 if cactus == self:
                         continue   #if it starts to check with itself, it goes back to beggining of loop
 
-                while ((self.x - cactus.x) < 1000 and (self.x - cactus.x) > -1000) == True:  #checks if distance between 2 cacti is in between 1000 and -1000 (any distance within 1000 pixels)
+                while (abs(self.x-cactus.x) < 1000) == True:  #checks if distance between 2 cacti is in between 1000 and -1000 (any distance within 1000 pixels)
                     self.x += random.randint(1000,3000)  #random added x value so there are gaps between each cactus
                     self.type = random.choice(self.cactiTypes)
                     self.y = 550 - self.type[1]

@@ -9,7 +9,9 @@
 #Add speed cap
 #FIX DISTANCE BETWEEN CACTI WITH ABS()
 
-#Game music by: Lee
+#Game music by: Lee§
+
+"""All comments like this = network stuff"""
 
 import pygame
 from player import *
@@ -103,9 +105,9 @@ def main():
         for cactus in cacti:
             cactus.move(cacti, gameSpeed)
 
-        p2Info = stringToArr(n.send(arrToString([round(player.yPos), player.currentDino]))) #sends data as a string, gets back data and converts back to array
+        """p2Info = stringToArr(n.send(arrToString([round(player.yPos), player.currentDino]))) #sends data as a string, gets back data and converts back to array
         p2Pos = p2Info[0]
-        p2Dino = p2Info[1]
+        p2Dino = p2Info[1]"""
 
         gameSpeed += 0.001
 
@@ -133,18 +135,18 @@ def main():
         if animationFrame*gameSpeed >= 2560: #so that the background is infinte and will move back to beginning
             animationFrame = 0
 
-        if animationFrame % 4 == 0:    #If statement so every new frame, the sprite is changed
+        """if animationFrame % 4 == 0:    #If statement so every new frame, the sprite is changed
             currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][0])
         elif animationFrame % 4 == 1:
             currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1])
         elif animationFrame % 4 == 2:
             currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][2])
         else:
-            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1]) 
+            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1])"""
 
         #sprite drawings
         player.draw(animationFrame, screen)
-        screen.blit(currentSpriteP2, (200,int(p2Pos)))
+        """screen.blit(currentSpriteP2, (200,int(p2Pos)))"""
         screen.blit(scoreText, (1100, 25))
         screen.blit(highScoreText, (1200, 25))
         pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))
@@ -158,7 +160,7 @@ def main():
         fpsClock.tick(FPS)
 
         #Collisioin detection AFTER drawing so no visual bugs happen
-        """for cactus in cacti:
+        for cactus in cacti:
             if cactus.collided(player.yPos) == True:
                 pygame.mixer.music.stop()
                 pygame.mixer.Sound.play(deathSound)
@@ -170,7 +172,7 @@ def main():
                     highScoreFile.close()
                 
                 run = False
-                break"""
+                break
     
 def dinoCustomization():
     global gameState
@@ -276,6 +278,12 @@ def dinoCustomization():
         pygame.draw.line(screen, (255,0,0),(1210,290),(1210,410), width = 3)
         pygame.draw.line(screen, (255,0,0),(1090,410),(1210,410), width = 3)
 
+    if player.currentDino == 12:
+        pygame.draw.line(screen, (255,0,0),(90,440),(90,560), width = 3)
+        pygame.draw.line(screen, (255,0,0),(90,440),(210,440), width = 3)
+        pygame.draw.line(screen, (255,0,0),(210,440),(210,560), width = 3)
+        pygame.draw.line(screen, (255,0,0),(90,560),(210,560), width = 3)
+
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -324,6 +332,9 @@ def dinoCustomization():
             
             if mousePressed(1100, 300, 100, 100):
                 player.currentDino = 11
+
+            if mousePressed(100, 450, 100, 100):
+                player.currentDino = 12
 
             playerSettingsFile = open("playerSettings.txt", "w")
             playerSettingsFile.write(str(player.currentDino))

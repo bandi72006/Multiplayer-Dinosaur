@@ -16,7 +16,8 @@ dinoChoices = [["Sprites/Dinosaur/DefaultDino1.png","Sprites/Dinosaur/DefaultDin
 ["Sprites/Dinosaur/SteveDino1.png", "Sprites/Dinosaur/SteveDino2.png", "Sprites/Dinosaur/SteveDino3.png", "Steve Dino"],  #Steve dino
 ["Sprites/Dinosaur/AlexDino1.png", "Sprites/Dinosaur/AlexDino2.png", "Sprites/Dinosaur/AlexDino3.png", "Alex Dino"], #Alex Dino (from minecraft)
 ["Sprites/Dinosaur/DreamDino1.png", "Sprites/Dinosaur/DreamDino2.png", "Sprites/Dinosaur/DreamDino3.png", "Dream Dino"], #Dream Dino (minecraft youtuber)
-["Sprites/Dinosaur/AnimeDino1.png", "Sprites/Dinosaur/AnimeDino2.png", "Sprites/Dinosaur/AnimeDino3.png", "Anime Dino"] #Anime Dino
+["Sprites/Dinosaur/AnimeDino1.png", "Sprites/Dinosaur/AnimeDino2.png", "Sprites/Dinosaur/AnimeDino3.png", "Anime Dino"], #Anime Dino
+["Sprites/Dinosaur/MarioDino1.png", "Sprites/Dinosaur/MarioDino2.png", "Sprites/Dinosaur/MarioDino3.png", "Mario Dino"], #Mario Dino
 ]
 
 n = Network()
