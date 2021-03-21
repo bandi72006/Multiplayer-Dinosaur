@@ -11,8 +11,6 @@
 
 #Game music by: Lee§
 
-"""All comments like this = network stuff"""
-
 import pygame
 from player import *
 from cactus import *
@@ -27,14 +25,16 @@ pygame.display.set_caption("MultiplayerDinosaur")
 
 #fonts
 font = pygame.font.Font('freesansbold.ttf',25)
-menuFont = pygame.font.Font('Sprites/Fonts/menuFont.ttf', 17)
+menuFont = pygame.font.Font('Sprites/Fonts/menuFont.ttf', 15)
 titleFont = pygame.font.Font("Sprites/Fonts/menuFont.ttf", 35)
 dinoNameFont = pygame.font.Font('Sprites/Fonts/menuFont.ttf', 10)
 titleTextTop = titleFont.render("Multiplayer", True, (0,0,0))
 titleTextBottom = titleFont.render("Dino", True, (0,0,0))
 
-retryText = menuFont.render("Play", True, (255,255,255))
+OfflineText = menuFont.render("Offline", True, (255,255,255))
 changeDinoText = menuFont.render("Change", True, (255,255,255))
+OnlineText = menuFont.render("Online", True, (255,255,255))
+
 
 gameState = "mainMenu"
 
@@ -105,9 +105,10 @@ def main():
         for cactus in cacti:
             cactus.move(cacti, gameSpeed)
 
-        """p2Info = stringToArr(n.send(arrToString([round(player.yPos), player.currentDino]))) #sends data as a string, gets back data and converts back to array
-        p2Pos = p2Info[0]
-        p2Dino = p2Info[1]"""
+        if gameState == "playOnline":
+            p2Info = stringToArr(n.send(arrToString([round(player.yPos), player.currentDino]))) #sends data as a string, gets back data and converts back to array
+            p2Pos = p2Info[0]
+            p2Dino = p2Info[1]
 
         gameSpeed += 0.001
 
@@ -134,19 +135,22 @@ def main():
 
         if animationFrame*gameSpeed >= 2560: #so that the background is infinte and will move back to beginning
             animationFrame = 0
-
-        """if animationFrame % 4 == 0:    #If statement so every new frame, the sprite is changed
-            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][0])
-        elif animationFrame % 4 == 1:
-            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1])
-        elif animationFrame % 4 == 2:
-            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][2])
-        else:
-            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1])"""
+        
+        if gameState == "playOnline":
+            if animationFrame % 4 == 0:    #If statement so every new frame, the sprite is changed
+                currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][0])
+            elif animationFrame % 4 == 1:
+                currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1])
+            elif animationFrame % 4 == 2:
+                currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][2])
+            else:
+                currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1])
 
         #sprite drawings
         player.draw(animationFrame, screen)
-        """screen.blit(currentSpriteP2, (200,int(p2Pos)))"""
+        if gameState == "playOnline":
+            screen.blit(currentSpriteP2, (200,int(p2Pos)))
+
         screen.blit(scoreText, (1100, 25))
         screen.blit(highScoreText, (1200, 25))
         pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))
@@ -365,15 +369,17 @@ def mainMenu():
     if animationFrame >= 2560: #so that the background is infinte and will move back to beginning
         animationFrame = 0
 
-    pygame.draw.rect(screen, (255,255,255), ((1280/2)-210, 180, 420, 360)) #white rectangle behind all text
+    pygame.draw.rect(screen, (255,255,255), ((1280/2)-210, 180, 420, 390)) #white rectangle behind all text
 
-    pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), (720/2)-50, 100, 50)) #replay button
-    pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), 400, 100, 50)) #dino customization button
+    pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), 310, 100, 50)) #Offline play button button
+    pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), 400, 100, 50)) #Online play button button
+    pygame.draw.rect(screen, (100,100,100), ((1280/2)-(100/2), 490, 100, 50)) #dino customization button
 
     screen.blit(titleTextTop, ((1280/2)-190, 200))  #title text "multiplayer" part
     screen.blit(titleTextBottom, ((1280/2)-70, 240))  #title text "dino" part
-    screen.blit(retryText, ((1280/2)-(100/2)+10, (720/2)-35)) #retry text on button
-    screen.blit(changeDinoText, ((1280/2)-(100/2), 415)) #change dino text on the button
+    screen.blit(OfflineText, ((1280/2)-(100/2), (720/2)-35)) #Offline play text on button
+    screen.blit(changeDinoText, ((1280/2)-(100/2)+5, 415)) #change dino text on the button
+    screen.blit(OnlineText, ((1280/2)-(100/2)+5, 505)) #Offline play text on button
 
     pygame.display.update()
 
@@ -385,12 +391,16 @@ def mainMenu():
 
             #checks if mouse is in between those x values (where the box is)
             if mousePressed((1280/2)-(100/2), (720/2)-50, 100, 50):
-                gameState = "play"
+                gameState = "playOffline"
 
             elif mousePressed((1280/2)-(100/2), 415, 100, 50):
                 pygame.mixer.music.load("Sound/Music/DinoCustomization.mp3")
                 pygame.mixer.music.play(-1) #-1 plays it infinitely
                 gameState = "dinoCustomization"
+
+            elif mousePressed((1280/2)-(100/2)+5, 505, 100, 50):
+                gameState = "playOnline"
+
 
             else:
                 gameState = "mainMenu"
@@ -400,7 +410,7 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
 
-    if gameState == "play":
+    if gameState == "playOffline" or gameState == "playOnline":
         main()
         gameState = "mainMenu"
         
