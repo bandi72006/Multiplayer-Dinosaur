@@ -156,7 +156,7 @@ def main():
 
         screen.blit(scoreText, (1100, 25))
         screen.blit(highScoreText, (1200, 25))
-        pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))
+        #pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))    Line representing ground
     
         for cactus in cacti:
             cactus.draw(screen)
