@@ -9,15 +9,15 @@
 #Add speed cap
 #FIX DISTANCE BETWEEN CACTI WITH ABS()
 
-#Game music by: Lee§
+#Game music by: Lee
 
 import pygame
 from player import *
 from cactus import *
-player = Player()
-p2 = Player()
 
 from pygame.constants import MOUSEBUTTONDOWN
+
+player = Player()
 
 pygame.init()
 screen = pygame.display.set_mode((1280,720))
@@ -74,6 +74,9 @@ def main():
     
     #Creates all cacti objects and stores them in a list
     cacti = [Cactus(-1000, i) for i in range(3)] #-1000 so it autmoatically gets moved to the beginning
+
+    if gameState == "playOnline":
+        p2 = Player()
 
     #sets some important variables
     score = 0 

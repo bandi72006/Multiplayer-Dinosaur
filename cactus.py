@@ -1,6 +1,8 @@
 #Bandar Al Aish 
 #All code for the cactus class
 
+#Cactus drawn by Sasha
+
 import pygame
 import random
 
