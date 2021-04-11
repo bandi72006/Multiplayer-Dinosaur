@@ -1,5 +1,10 @@
+#To do:
+#Add game speed in online version
+
+from player import Player
 import socket
 from _thread import *
+from cactus import *
 
 server = "192.168.1.70"
 port = 5555 #typically an open port
@@ -15,14 +20,13 @@ except socket.error as e:
 s.listen(2) #opens up port to "listen". Parameter = number of connections
 print("Waiting for connection, server has started")
 
-def arrToString(arr):
-    return str(arr[0]) + "," + str(arr[1])
 
 def stringToArr(str):
     string = str.split(",")
     return string[0], string[1]
 
 pos = [450, 450]
+cactusPositions = []
 playerDinoChoices = [0, 0]
 
 def threaded_client(conn, player): #conn = connection
@@ -39,11 +43,18 @@ def threaded_client(conn, player): #conn = connection
                 print("Disconnected")
                 break
             else:
-                if player == 1:
-                    reply = str(pos[0]) + "," + str(playerDinoChoices[0])
+                if player == 0:
+                    #Sends cactus data to everyone
 
+                    cactusPositions = []
+                    for cactus in cacti:
+                        print("ok")
+                        cactus.move(cacti, 1)
+                        cactusPositions.append(cactus.x)
+
+                    reply = str(pos[1]) + "," + str(playerDinoChoices[1]) + "," + str(cactusPositions[0]) + "," + str(cactusPositions[1]) + "," + str(cactusPositions[2])
                 else:
-                    reply = str(pos[1]) + "," + str(playerDinoChoices[1])
+                    reply = str(pos[0]) + "," + str(playerDinoChoices[0])
 
                 print("Received: ", data)
                 print("Sending : ", reply)
@@ -58,6 +69,8 @@ def threaded_client(conn, player): #conn = connection
     currentPlayer -= 1
 
 currentPlayer = 0
+
+cacti = [Cactus(-1000, i) for i in range(3)] #-1000 so it autmoatically gets moved to the beginning
 
 while True: #continuosly looks for connections
     conn, addr = s.accept() #accepts any incoming connections
