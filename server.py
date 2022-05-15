@@ -1,12 +1,12 @@
 #To do:
 #Add game speed in online version
 
-from player import Player
+from Player import Player
 import socket
 from _thread import *
 from cactus import *
 
-server = "192.168.1.70"
+server = "192.168.70.159"
 port = 5555 #typically an open port
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) #type of connection we are making
@@ -22,11 +22,9 @@ print("Waiting for connection, server has started")
 
 
 def stringToArr(str):
-    string = str.split(",")
-    return string[0], string[1]
+    return str.split(",")
 
 pos = [450, 450]
-cactusPositions = []
 playerDinoChoices = [0, 0]
 
 def threaded_client(conn, player): #conn = connection
@@ -43,18 +41,20 @@ def threaded_client(conn, player): #conn = connection
                 print("Disconnected")
                 break
             else:
+                #Sends cactus data to everyone
+
+                cactusPositions = []
+                for cactus in cacti:
+                    cactus.move(cacti, 1)
+                    cactusPositions.append(cactus.x)
+
                 if player == 0:
-                    #Sends cactus data to everyone
-
-                    cactusPositions = []
-                    for cactus in cacti:
-                        print("ok")
-                        cactus.move(cacti, 1)
-                        cactusPositions.append(cactus.x)
-
-                    reply = str(pos[1]) + "," + str(playerDinoChoices[1]) + "," + str(cactusPositions[0]) + "," + str(cactusPositions[1]) + "," + str(cactusPositions[2])
+                    sendingPosition = 1
                 else:
-                    reply = str(pos[0]) + "," + str(playerDinoChoices[0])
+                    sendingPosition = 0
+
+                reply = str(pos[sendingPosition]) + "," + str(playerDinoChoices[sendingPosition]) + "," + str(cactusPositions[0]) + "," + str(cactusPositions[1]) + "," + str(cactusPositions[2])
+
 
                 print("Received: ", data)
                 print("Sending : ", reply)
@@ -70,7 +70,7 @@ def threaded_client(conn, player): #conn = connection
 
 currentPlayer = 0
 
-cacti = [Cactus(-1000, i) for i in range(3)] #-1000 so it autmoatically gets moved to the beginning
+cacti = [Cactus(-1000, i) for i in range(3)] #-1000 so it automatically gets moved to the beginning
 
 while True: #continuosly looks for connections
     conn, addr = s.accept() #accepts any incoming connections

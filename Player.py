@@ -20,7 +20,7 @@ dinoChoices = [["Sprites/Dinosaur/DefaultDino1.png","Sprites/Dinosaur/DefaultDin
 ["Sprites/Dinosaur/MarioDino1.png", "Sprites/Dinosaur/MarioDino2.png", "Sprites/Dinosaur/MarioDino3.png", "Mario Dino"], #Mario Dino
 ]
 
-#n = Network()
+n = Network()
 
 class Player():
     def __init__(self):

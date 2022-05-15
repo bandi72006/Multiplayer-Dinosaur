@@ -11,7 +11,7 @@
 #Game music by: Lee
 
 import pygame
-from player import *
+from Player import *
 from cactus import *
 
 from pygame.constants import MOUSEBUTTONDOWN
@@ -53,11 +53,13 @@ FPS = 30
 
 
 def arrToString(arr):
-    return str(arr[0]) + "," + str(arr[1])
+    for i in range(len(arr)):
+        arr[i] = str(arr[i])
+
+    return ",".join(arr)
 
 def stringToArr(str):
-    string = str.split(",")
-    return string[0], string[1]
+    return str.split(",")
 
 def mousePressed(x, y, width, height):
     if pygame.mouse.get_pos()[0] > x and pygame.mouse.get_pos()[0] < x+width: #Checks if x is in between the left and the right of the object
@@ -107,9 +109,13 @@ def main():
             cactus.move(cacti, gameSpeed)
 
         if gameState == "playOnline":
-            p2Info = stringToArr(n.send(arrToString([round(player.yPos), player.currentDino]))) #sends data as a string, gets back data and converts back to array
-            p2Pos = p2Info[0]
-            p2Dino = p2Info[1]
+            serverData = stringToArr(n.send(arrToString([round(player.yPos), player.currentDino]))) #sends data as a string, gets back data and converts back to array
+            p2Pos = serverData[0]
+            p2Dino = serverData[1]
+
+        if gameState == "playOnline":
+            for i in range(len(cacti)):
+                cacti[i].x = int(serverData[i+2])
 
         if gameSpeed <= 3:
             gameSpeed += 0.001
@@ -166,7 +172,7 @@ def main():
         fpsClock.tick(FPS)
 
         #Collisioin detection AFTER drawing so no visual bugs happen
-        for cactus in cacti:
+        """for cactus in cacti:
             if cactus.collided(player.yPos) == True:
                 pygame.mixer.music.stop()
                 pygame.mixer.Sound.play(deathSound)
@@ -178,7 +184,7 @@ def main():
                     highScoreFile.close()
                 
                 run = False
-                break
+                break"""
     
 def dinoCustomization():
     global gameState
