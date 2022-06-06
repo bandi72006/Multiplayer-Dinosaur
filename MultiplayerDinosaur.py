@@ -71,13 +71,11 @@ def mousePressed(x, y, width, height):
         return False
 
 
-def main():
+def offline():
     
     #Creates all cacti objects and stores them in a list
     cacti = [Cactus(-1000, i) for i in range(3)] #-1000 so it autmoatically gets moved to the beginning
 
-    if gameState == "playOnline":
-        p2 = Player()
 
     #sets some important variables
     score = 0 
@@ -108,15 +106,6 @@ def main():
         for cactus in cacti:
             cactus.move(cacti, gameSpeed)
 
-        if gameState == "playOnline":
-            serverData = stringToArr(n.send(arrToString([round(player.yPos), player.currentDino]))) #sends data as a string, gets back data and converts back to array
-            p2Pos = serverData[0]
-            p2Dino = serverData[1]
-
-        if gameState == "playOnline":
-            for i in range(len(cacti)):
-                cacti[i].x = int(serverData[i+2])
-
         if gameSpeed <= 3:
             gameSpeed += 0.001
 
@@ -143,21 +132,11 @@ def main():
 
         if animationFrame*gameSpeed >= 2560: #so that the background is infinte and will move back to beginning
             animationFrame = 0
-        
-        if gameState == "playOnline":
-            if animationFrame % 4 == 0:    #If statement so every new frame, the sprite is changed
-                currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][0])
-            elif animationFrame % 4 == 1:
-                currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1])
-            elif animationFrame % 4 == 2:
-                currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][2])
-            else:
-                currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1])
+
 
         #sprite drawings
         player.draw(animationFrame, screen)
-        if gameState == "playOnline":
-            screen.blit(currentSpriteP2, (200,int(p2Pos)))
+
 
         screen.blit(scoreText, (1100, 25))
         screen.blit(highScoreText, (1200, 25))
@@ -171,8 +150,8 @@ def main():
         #sets FPS to certain value
         fpsClock.tick(FPS)
 
-        #Collisioin detection AFTER drawing so no visual bugs happen
-        """for cactus in cacti:
+        #Collision detection AFTER drawing so no visual bugs happen
+        for cactus in cacti:
             if cactus.collided(player.yPos) == True:
                 pygame.mixer.music.stop()
                 pygame.mixer.Sound.play(deathSound)
@@ -184,7 +163,110 @@ def main():
                     highScoreFile.close()
                 
                 run = False
-                break"""
+                break
+
+def online():
+
+    cacti = [Cactus(-1000, i) for i in range(3)] #Array of random cacti so it can be changed
+
+    #sets some important variables
+    score = 0 
+    run = True
+    animationFrame = 1
+    gameSpeed = 1
+
+    highScoreFile = open("highScoreFile.txt", "r")
+    highScore = highScoreFile.read()
+    highScoreFile.close()
+
+    pygame.mixer.music.load('Sound/Music/BeepBox-Song.mp3')
+    pygame.mixer.music.play(-1) #-1 plays it infinitely
+
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
+        #Movement
+
+        player.jump()
+
+        score += int(gameSpeed)
+        scoreText = font.render(str(score), True, (0,0,0))
+
+        serverData = stringToArr(n.send(arrToString([round(player.yPos), player.currentDino]))) #sends data as a string, gets back data and converts back to array
+        p2Pos = serverData[0]
+        p2Dino = serverData[1]
+
+        for i in range(len(cacti)):
+            cacti[i].x = int(serverData[i+2])
+
+        if gameSpeed <= 3:
+            gameSpeed += 0.001
+
+        #Input handling
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE] or keys[pygame.K_UP]:
+            if player.isJump == False:
+                pygame.mixer.Sound.play(jumpSound)
+                player.yVel = 30
+                player.isJump = True
+
+        if keys[pygame.K_DOWN]:
+                player.yVel = (player.yVel - 30)*0.7 #-30 part so it's always positive and falls down
+
+
+        #dino animatioin   
+        animationFrame += 1
+
+        #CLEAR SCREEN          ALL DRAWNIG MUST GO BELOW HERE! VVVVVVV
+
+        #background drawing
+        screen.blit(backgroundImage, ((-animationFrame)*gameSpeed,0))
+        screen.blit(backgroundImage, ((-animationFrame)*gameSpeed+2560,0)) #second image behind first one so it isnt white
+
+        if animationFrame*gameSpeed >= 2560: #so that the background is infinte and will move back to beginning
+            animationFrame = 0
+    
+        if animationFrame % 4 == 0:    #If statement so every new frame, the sprite is changed
+            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][0])
+        elif animationFrame % 4 == 1:
+            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1])
+        elif animationFrame % 4 == 2:
+            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][2])
+        else:
+            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1])
+
+        #sprite drawings
+        player.draw(animationFrame, screen)
+
+        screen.blit(currentSpriteP2, (200,int(p2Pos)))
+
+        screen.blit(scoreText, (1100, 25))
+        #pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))    Line representing ground
+    
+        for cactus in cacti:
+            cactus.draw(screen)
+
+        pygame.display.update()
+        
+        #sets FPS to certain value
+        fpsClock.tick(FPS)
+
+        #Collisioin detection AFTER drawing so no visual bugs happen
+        for cactus in cacti:
+            if cactus.collided(player.yPos) == True:
+                pygame.mixer.music.stop()
+                pygame.mixer.Sound.play(deathSound)
+                pygame.time.delay(1000)
+
+                if score > int(highScore):
+                    highScoreFile = open("highScoreFile.txt", "w")
+                    highScoreFile.write(str(score))
+                    highScoreFile.close()
+                
+                #run = False
+                break
     
 def dinoCustomization():
     global gameState
@@ -417,8 +499,12 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
 
-    if gameState == "playOffline" or gameState == "playOnline":
-        main()
+    if gameState == "playOffline":
+        offline()
+        gameState = "mainMenu"
+
+    if  gameState == "playOnline":
+        online()
         gameState = "mainMenu"
         
     if gameState == "mainMenu":
