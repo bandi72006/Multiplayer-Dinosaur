@@ -409,7 +409,6 @@ def mainMenu():
             elif mousePressed((1280/2)-(100/2)+5, 505, 100, 50):
                 gameState = "playOnline"
 
-
             else:
                 gameState = "mainMenu"
 
