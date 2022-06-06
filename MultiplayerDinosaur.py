@@ -191,18 +191,22 @@ def online():
 
         player.jump()
 
-        score += int(gameSpeed)
+        if gameState == "game":
+            score += int(gameSpeed)
         scoreText = font.render(str(score), True, (0,0,0))
 
         serverData = stringToArr(n.send(arrToString([round(player.yPos), player.currentDino]))) #sends data as a string, gets back data and converts back to array
-        p2Pos = serverData[0]
-        p2Dino = serverData[1]
+        print(serverData)
+        p2Pos = serverData[1]
+        p2Dino = serverData[2]
 
         for i in range(len(cacti)):
-            cacti[i].x = int(serverData[i+2])
+            cacti[i].x = int(serverData[i+3])
 
-        if gameSpeed <= 3:
-            gameSpeed += 0.001
+        if gameState == "game":
+            if gameSpeed <= 3:
+                gameSpeed += 0.001
+
 
         #Input handling
         keys = pygame.key.get_pressed()
@@ -216,8 +220,9 @@ def online():
                 player.yVel = (player.yVel - 30)*0.7 #-30 part so it's always positive and falls down
 
 
-        #dino animatioin   
-        animationFrame += 1
+        #dino animation
+        if gameState == "game":
+            animationFrame += 1
 
         #CLEAR SCREEN          ALL DRAWNIG MUST GO BELOW HERE! VVVVVVV
 
@@ -238,9 +243,9 @@ def online():
             currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1])
 
         #sprite drawings
-        player.draw(animationFrame, screen)
-
         screen.blit(currentSpriteP2, (200,int(p2Pos)))
+
+        player.draw(animationFrame, screen)
 
         screen.blit(scoreText, (1100, 25))
         #pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))    Line representing ground
@@ -254,7 +259,7 @@ def online():
         fpsClock.tick(FPS)
 
         #Collisioin detection AFTER drawing so no visual bugs happen
-        for cactus in cacti:
+        """for cactus in cacti:
             if cactus.collided(player.yPos) == True:
                 pygame.mixer.music.stop()
                 pygame.mixer.Sound.play(deathSound)
@@ -266,7 +271,7 @@ def online():
                     highScoreFile.close()
                 
                 #run = False
-                break
+                break"""
     
 def dinoCustomization():
     global gameState

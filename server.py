@@ -6,6 +6,8 @@ import socket
 from _thread import *
 from cactus import *
 
+gameState = "pregame"
+
 server = "192.168.70.159"
 port = 5555 #typically an open port
 
@@ -45,7 +47,9 @@ def threaded_client(conn, player): #conn = connection
 
                 cactusPositions = []
                 for cactus in cacti:
-                    cactus.move(cacti, 1)
+                    if gameState == "game":
+                        cactus.move(cacti, 1)
+                        
                     cactusPositions.append(cactus.x)
 
                 if player == 0:
@@ -53,8 +57,7 @@ def threaded_client(conn, player): #conn = connection
                 else:
                     sendingPosition = 0
 
-                reply = str(pos[sendingPosition]) + "," + str(playerDinoChoices[sendingPosition]) + "," + str(cactusPositions[0]) + "," + str(cactusPositions[1]) + "," + str(cactusPositions[2])
-
+                reply = gameState + "," + str(pos[sendingPosition]) + "," + str(playerDinoChoices[sendingPosition]) + "," + str(cactusPositions[0]) + "," + str(cactusPositions[1]) + "," + str(cactusPositions[2])
 
                 print("Received: ", data)
                 print("Sending : ", reply)
@@ -76,5 +79,9 @@ while True: #continuosly looks for connections
     conn, addr = s.accept() #accepts any incoming connections
     print("Connected to:", addr)
 
+    if currentPlayer == 1: #The new person that will join is going to be n+1, aka the players needed to start
+        gameState = "game"
     start_new_thread(threaded_client, (conn, currentPlayer)) #allows for multiple connections happening at once
     currentPlayer += 1
+    print(currentPlayer)
+    
