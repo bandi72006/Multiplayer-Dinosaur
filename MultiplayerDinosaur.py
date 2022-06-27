@@ -10,6 +10,7 @@
 
 #Game music by: Lee
 
+from http import server
 import pygame
 from Player import *
 from cactus import *
@@ -196,7 +197,6 @@ def online():
         scoreText = font.render(str(score), True, (0,0,0))
 
         serverData = stringToArr(n.send(arrToString([round(player.yPos), player.currentDino]))) #sends data as a string, gets back data and converts back to array
-        print(serverData)
         p2Pos = serverData[1]
         p2Dino = serverData[2]
 
@@ -209,12 +209,13 @@ def online():
 
 
         #Input handling
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE] or keys[pygame.K_UP]:
-            if player.isJump == False:
-                pygame.mixer.Sound.play(jumpSound)
-                player.yVel = 30
-                player.isJump = True
+        if player.state == "alive":
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_SPACE] or keys[pygame.K_UP]:
+                if player.isJump == False:
+                    pygame.mixer.Sound.play(jumpSound)
+                    player.yVel = 30
+                    player.isJump = True
 
         if keys[pygame.K_DOWN]:
                 player.yVel = (player.yVel - 30)*0.7 #-30 part so it's always positive and falls down
@@ -259,7 +260,7 @@ def online():
         fpsClock.tick(FPS)
 
         #Collisioin detection AFTER drawing so no visual bugs happen
-        """for cactus in cacti:
+        for cactus in cacti:
             if cactus.collided(player.yPos) == True:
                 pygame.mixer.music.stop()
                 pygame.mixer.Sound.play(deathSound)
@@ -270,8 +271,9 @@ def online():
                     highScoreFile.write(str(score))
                     highScoreFile.close()
                 
-                #run = False
-                break"""
+                player.yPos = -150 #teleported to 150 to indicate death
+                player.state = "dead"
+                break
     
 def dinoCustomization():
     global gameState

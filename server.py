@@ -1,7 +1,7 @@
 #To do:
 #Add game speed in online version
+#CREATE A GAME END (finish state), if playerData[player][0] != '-150': causes error?
 
-from Player import Player
 import socket
 from _thread import *
 from cactus import *
@@ -26,24 +26,41 @@ print("Waiting for connection, server has started")
 def stringToArr(str):
     return str.split(",")
 
-pos = [450, 450]
-playerDinoChoices = [0, 0]
+#data format: y position, dino choice
+playerData = [[450,0],[450,0]]
 
 def threaded_client(conn, player): #conn = connection
     global currentPlayer
-    conn.send(str.encode(str(pos[player])))
+    global gameState
+    conn.send(str.encode(str(playerData[player][0])))
     reply = ""
+
     while True:
         try:
             data = stringToArr(conn.recv(2048).decode())
-            pos[player] = data[0]
-            playerDinoChoices[player] = data[1]
+            playerData[player][0] = data[0]
+            playerData[player][1] = data[1]
+
 
             if not data:
                 print("Disconnected")
                 break
             else:
                 #Sends cactus data to everyone
+
+                #checks if game should end
+
+                totalDead = 0
+                for i in range(len(playerData)):
+                    if int(playerData[i][0]) == -150:
+                        totalDead += 1
+
+                if gameState == "game":
+                    if currentPlayer - totalDead == 1:
+                        gameState = "finish"
+
+                print(gameState)
+
 
                 cactusPositions = []
                 for cactus in cacti:
@@ -57,14 +74,16 @@ def threaded_client(conn, player): #conn = connection
                 else:
                     sendingPosition = 0
 
-                reply = gameState + "," + str(pos[sendingPosition]) + "," + str(playerDinoChoices[sendingPosition]) + "," + str(cactusPositions[0]) + "," + str(cactusPositions[1]) + "," + str(cactusPositions[2])
+                reply = gameState + "," + str(playerData[sendingPosition][0]) + "," + str(playerData[sendingPosition][1]) + "," + str(cactusPositions[0]) + "," + str(cactusPositions[1]) + "," + str(cactusPositions[2])
 
                 print("Received: ", data)
                 print("Sending : ", reply)
 
+            
             conn.sendall(str.encode(str(reply)))
 
         except:
+            print("An exception occured")
             break
 
     print("Lost connection")
@@ -79,9 +98,9 @@ while True: #continuosly looks for connections
     conn, addr = s.accept() #accepts any incoming connections
     print("Connected to:", addr)
 
-    if currentPlayer == 1: #The new person that will join is going to be n+1, aka the players needed to start
+    if currentPlayer == 1: 
         gameState = "game"
     start_new_thread(threaded_client, (conn, currentPlayer)) #allows for multiple connections happening at once
     currentPlayer += 1
-    print(currentPlayer)
+
     

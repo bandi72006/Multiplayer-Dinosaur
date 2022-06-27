@@ -28,6 +28,7 @@ class Player():
         self.isJump = False
         self.yVel = 0
         self.currentSprite = 0
+        self.state = "alive"
         
         playerSettingsFile = open("playerSettings.txt", "r")
         self.currentDino = int(playerSettingsFile.readline())
@@ -43,7 +44,8 @@ class Player():
                 self.yPos -= self.yVel  
         
         else:
-            self.yPos = 450  
+            if self.state == "alive":
+                self.yPos = 450  
 
 
         if self.yPos > 450: #keeps yValue always at 450, as if it hit the ground
