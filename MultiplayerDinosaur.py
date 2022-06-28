@@ -28,6 +28,7 @@ font = pygame.font.Font('freesansbold.ttf',25)
 menuFont = pygame.font.Font('Sprites/Fonts/menuFont.ttf', 15)
 titleFont = pygame.font.Font("Sprites/Fonts/menuFont.ttf", 35)
 dinoNameFont = pygame.font.Font('Sprites/Fonts/menuFont.ttf', 10)
+
 titleTextTop = titleFont.render("Multiplayer", True, (0,0,0))
 titleTextBottom = titleFont.render("Dino", True, (0,0,0))
 
@@ -196,17 +197,17 @@ def online():
             score += int(gameSpeed)
         scoreText = font.render(str(score), True, (0,0,0))
 
-        serverData = stringToArr(n.send(arrToString([round(player.yPos), player.currentDino]))) #sends data as a string, gets back data and converts back to array
+        serverData = stringToArr(player.n.send(arrToString([round(player.yPos), player.currentDino]))) #sends data as a string, gets back data and converts back to array
+        onlineGameState = serverData[0]
         p2Pos = serverData[1]
         p2Dino = serverData[2]
 
         for i in range(len(cacti)):
             cacti[i].x = int(serverData[i+3])
 
-        if gameState == "game":
+        if onlineGameState == "game":
             if gameSpeed <= 3:
                 gameSpeed += 0.001
-
 
         #Input handling
         if player.state == "alive":
@@ -249,7 +250,10 @@ def online():
         player.draw(animationFrame, screen)
 
         screen.blit(scoreText, (1100, 25))
-        #pygame.draw.line(screen,(0,0,0),(0,550),(1280,550))    Line representing ground
+
+        if "countdown" in onlineGameState:
+            countdownText = titleFont.render(str(3-int(onlineGameState[-1])), True, (0,0,0))
+            screen.blit(countdownText, (640, 360))
     
         for cactus in cacti:
             cactus.draw(screen)
@@ -511,6 +515,7 @@ while True:
         gameState = "mainMenu"
 
     if  gameState == "playOnline":
+        player.online()
         online()
         gameState = "mainMenu"
         

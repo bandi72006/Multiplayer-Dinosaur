@@ -20,8 +20,6 @@ dinoChoices = [["Sprites/Dinosaur/DefaultDino1.png","Sprites/Dinosaur/DefaultDin
 ["Sprites/Dinosaur/MarioDino1.png", "Sprites/Dinosaur/MarioDino2.png", "Sprites/Dinosaur/MarioDino3.png", "Mario Dino"], #Mario Dino
 ]
 
-n = Network() 
-
 class Player():
     def __init__(self):
         self.yPos = 450
@@ -29,6 +27,7 @@ class Player():
         self.yVel = 0
         self.currentSprite = 0
         self.state = "alive"
+        self.n = ""
         
         playerSettingsFile = open("playerSettings.txt", "r")
         self.currentDino = int(playerSettingsFile.readline())
@@ -65,7 +64,10 @@ class Player():
             self.currentSprite = pygame.image.load(dinoChoices[self.currentDino][1])  
 
 
-        screen.blit(self.currentSprite, (200, self.yPos))    
+        screen.blit(self.currentSprite, (200, self.yPos))
+    
+    def online(self):
+        self.n = Network()
 
 
         

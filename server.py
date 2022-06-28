@@ -5,6 +5,7 @@
 import socket
 from _thread import *
 from cactus import *
+import time
 
 gameState = "pregame"
 
@@ -32,6 +33,7 @@ playerData = [[450,0],[450,0]]
 def threaded_client(conn, player): #conn = connection
     global currentPlayer
     global gameState
+    global startTime
     conn.send(str.encode(str(playerData[player][0])))
     reply = ""
 
@@ -45,7 +47,13 @@ def threaded_client(conn, player): #conn = connection
             if not data:
                 print("Disconnected")
                 break
-            else:
+            else:  
+
+                if "countdown" in gameState:
+                    gameState = "countdown" + str(int(time.time()-startTime))
+                    if(int(time.time()-startTime)) == 3:
+                        gameState = "game"            
+
                 #Sends cactus data to everyone
 
                 #checks if game should end
@@ -58,9 +66,6 @@ def threaded_client(conn, player): #conn = connection
                 if gameState == "game":
                     if currentPlayer - totalDead == 1:
                         gameState = "finish"
-
-                print(gameState)
-
 
                 cactusPositions = []
                 for cactus in cacti:
@@ -82,8 +87,9 @@ def threaded_client(conn, player): #conn = connection
             
             conn.sendall(str.encode(str(reply)))
 
-        except:
-            print("An exception occured")
+        except Exception as e:
+            print("An exception occured: ")
+            print(e)
             break
 
     print("Lost connection")
@@ -99,7 +105,8 @@ while True: #continuosly looks for connections
     print("Connected to:", addr)
 
     if currentPlayer == 1: 
-        gameState = "game"
+        gameState = "countdown"
+        startTime = time.time()
     start_new_thread(threaded_client, (conn, currentPlayer)) #allows for multiple connections happening at once
     currentPlayer += 1
 
