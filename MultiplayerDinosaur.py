@@ -46,13 +46,18 @@ animationFrame = 0
 displayedSprites = [dinoChoices[i][1] for i in range(len(dinoChoices))] #list comprehension, adds the second item in every array within the larger array
 
 #sounds
+soundVolume = 0.4
+
 jumpSound = pygame.mixer.Sound("Sound/Sound effects/LVLDJUMP.wav")
+jumpSound.set_volume(soundVolume)
 deathSound = pygame.mixer.Sound("Sound/Sound effects/LVLDDEATH.wav")
+deathSound.set_volume(soundVolume)
+
+pygame.mixer.music.set_volume(soundVolume)
 
 #Sets up FPS manager to keep it at 30 always
 fpsClock = pygame.time.Clock()
 FPS = 30
-
 
 def arrToString(arr):
     for i in range(len(arr)):
@@ -252,6 +257,7 @@ def online():
         screen.blit(scoreText, (1100, 25))
 
         if "countdown" in onlineGameState:
+            player.state = "alive"
             countdownText = titleFont.render(str(3-int(onlineGameState[-1])), True, (0,0,0))
             screen.blit(countdownText, (640, 360))
     
@@ -266,17 +272,11 @@ def online():
         #Collisioin detection AFTER drawing so no visual bugs happen
         for cactus in cacti:
             if cactus.collided(player.yPos) == True:
-                pygame.mixer.music.stop()
-                pygame.mixer.Sound.play(deathSound)
-                pygame.time.delay(1000)
-
-                if score > int(highScore):
-                    highScoreFile = open("highScoreFile.txt", "w")
-                    highScoreFile.write(str(score))
-                    highScoreFile.close()
-                
                 player.yPos = -150 #teleported to 150 to indicate death
                 player.state = "dead"
+                pygame.mixer.Sound.play(deathSound)
+                pygame.mixer.music.play(-1)
+            
                 break
     
 def dinoCustomization():

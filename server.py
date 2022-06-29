@@ -20,7 +20,7 @@ try:
 except socket.error as e:
     str(e)
 
-s.listen(2) #opens up port to "listen". Parameter = number of connections
+s.listen(10) #opens up port to "listen". Parameter = number of connections
 print("Waiting for connection, server has started")
 
 
@@ -52,7 +52,7 @@ def threaded_client(conn, player): #conn = connection
                 if "countdown" in gameState:
                     gameState = "countdown" + str(int(time.time()-startTime))
                     if(int(time.time()-startTime)) == 3:
-                        gameState = "game"            
+                        gameState = "game"
 
                 #Sends cactus data to everyone
 
@@ -65,7 +65,8 @@ def threaded_client(conn, player): #conn = connection
 
                 if gameState == "game":
                     if currentPlayer - totalDead == 1:
-                        gameState = "finish"
+                        gameState = "countdown"
+                        startTime = time.time()
 
                 cactusPositions = []
                 for cactus in cacti:
