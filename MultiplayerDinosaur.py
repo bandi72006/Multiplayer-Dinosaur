@@ -198,10 +198,6 @@ def online():
 
         player.jump()
 
-        if gameState == "game":
-            score += int(gameSpeed)
-        scoreText = font.render(str(score), True, (0,0,0))
-
         serverData = stringToArr(player.n.send(arrToString([round(player.yPos), player.currentDino]))) #sends data as a string, gets back data and converts back to array
         onlineGameState = serverData[0]
         p2Pos = serverData[1]
@@ -213,6 +209,11 @@ def online():
         if onlineGameState == "game":
             if gameSpeed <= 3:
                 gameSpeed += 0.001
+
+            score += int(gameSpeed)
+            
+        scoreText = font.render(str(score), True, (0,0,0))
+
 
         #Input handling
         if player.state == "alive":

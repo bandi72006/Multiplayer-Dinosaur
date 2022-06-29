@@ -65,8 +65,9 @@ def threaded_client(conn, player): #conn = connection
 
                 if gameState == "game":
                     if currentPlayer - totalDead == 1:
-                        gameState = "countdown"
+                        gameState = "countdown0"
                         startTime = time.time()
+                        cacti = [Cactus(-1000, i) for i in range(3)] #-1000 so it automatically gets moved to the beginning
 
                 cactusPositions = []
                 for cactus in cacti:
