@@ -28,12 +28,13 @@ def stringToArr(str):
     return str.split(",")
 
 #data format: y position, dino choice
-playerData = [[450,0],[450,0]]
+playerData = []
 
 def threaded_client(conn, player): #conn = connection
     global currentPlayer
     global gameState
     global startTime
+    global cacti
     conn.send(str.encode(str(playerData[player][0])))
     reply = ""
 
@@ -42,7 +43,6 @@ def threaded_client(conn, player): #conn = connection
             data = stringToArr(conn.recv(2048).decode())
             playerData[player][0] = data[0]
             playerData[player][1] = data[1]
-
 
             if not data:
                 print("Disconnected")
@@ -73,15 +73,18 @@ def threaded_client(conn, player): #conn = connection
                 for cactus in cacti:
                     if gameState == "game":
                         cactus.move(cacti, 1)
-                        
+
                     cactusPositions.append(cactus.x)
 
-                if player == 0:
-                    sendingPosition = 1
-                else:
-                    sendingPosition = 0
 
-                reply = gameState + "," + str(playerData[sendingPosition][0]) + "," + str(playerData[sendingPosition][1]) + "," + str(cactusPositions[0]) + "," + str(cactusPositions[1]) + "," + str(cactusPositions[2])
+                reply = gameState + "," + str(currentPlayer) + "," + str(cactusPositions[0]) + "," + str(cactusPositions[1]) + "," + str(cactusPositions[2]) 
+
+                for j in range(2):
+                    for i in range(currentPlayer):
+                        if i == player:
+                            pass
+                        else:
+                            reply += "," + str(playerData[i][j])
 
                 print("Received: ", data)
                 print("Sending : ", reply)
@@ -105,10 +108,12 @@ cacti = [Cactus(-1000, i) for i in range(3)] #-1000 so it automatically gets mov
 while True: #continuosly looks for connections
     conn, addr = s.accept() #accepts any incoming connections
     print("Connected to:", addr)
+    playerData.append([450,0])
 
-    if currentPlayer == 1: 
+    if currentPlayer == 2: 
         gameState = "countdown"
         startTime = time.time()
+
     start_new_thread(threaded_client, (conn, currentPlayer)) #allows for multiple connections happening at once
     currentPlayer += 1
 

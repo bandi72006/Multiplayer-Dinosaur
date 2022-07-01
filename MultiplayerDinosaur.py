@@ -200,11 +200,17 @@ def online():
 
         serverData = stringToArr(player.n.send(arrToString([round(player.yPos), player.currentDino]))) #sends data as a string, gets back data and converts back to array
         onlineGameState = serverData[0]
-        p2Pos = serverData[1]
-        p2Dino = serverData[2]
 
+        playersPos = []
+        playersDino = []
+
+        for i in range(int((len(serverData)-5)/2)):
+            playersPos.append(serverData[i+5])
+            playersDino.append(serverData[i+4+int(serverData[1])])
+
+    
         for i in range(len(cacti)):
-            cacti[i].x = int(serverData[i+3])
+            cacti[i].x = int(serverData[i+2])
 
         if onlineGameState == "game":
             if gameSpeed <= 3:
@@ -241,17 +247,13 @@ def online():
         if animationFrame*gameSpeed >= 2560: #so that the background is infinte and will move back to beginning
             animationFrame = 0
     
-        if animationFrame % 4 == 0:    #If statement so every new frame, the sprite is changed
-            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][0])
-        elif animationFrame % 4 == 1:
-            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1])
-        elif animationFrame % 4 == 2:
-            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][2])
-        else:
-            currentSpriteP2 = pygame.image.load(dinoChoices[int(p2Dino)][1])
+        for i in range(len(playersDino)):    #If statement so every new frame, the sprite is changed
+            playersDino[i] = pygame.image.load(dinoChoices[int(playersDino[i])][0])
 
         #sprite drawings
-        screen.blit(currentSpriteP2, (200,int(p2Pos)))
+        for i in range(len(playersDino)):
+            
+            screen.blit(playersDino[i], (200,int(playersPos[i])))
 
         player.draw(animationFrame, screen)
 
