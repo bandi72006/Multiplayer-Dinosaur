@@ -35,6 +35,8 @@ def threaded_client(conn, player): #conn = connection
     global gameState
     global startTime
     global cacti
+    frameTime = time.time()
+    gameSpeed = 1
     conn.send(str.encode(str(playerData[player][0])))
     reply = ""
 
@@ -60,7 +62,7 @@ def threaded_client(conn, player): #conn = connection
 
                 totalDead = 0
                 for i in range(len(playerData)):
-                    if int(playerData[i][0]) == -150:
+                    if int(playerData[i][0]) < -100:
                         totalDead += 1
 
                 if gameState == "game":
@@ -69,13 +71,17 @@ def threaded_client(conn, player): #conn = connection
                         startTime = time.time()
                         cacti = [Cactus(-1000, i) for i in range(3)] #-1000 so it automatically gets moved to the beginning
 
+                    if gameSpeed <= 3:
+                        gameSpeed += 0.001
+
                 cactusPositions = []
                 for cactus in cacti:
                     if gameState == "game":
-                        cactus.move(cacti, 1)
+                        if (time.time()-frameTime) > 1/30:
+                            cactus.move(cacti, gameSpeed)
+                            frameTime = time.time()
 
-                    cactusPositions.append(cactus.x)
-
+                    cactusPositions.append(int(cactus.x))
 
                 reply = gameState + "," + str(currentPlayer) + "," + str(cactusPositions[0]) + "," + str(cactusPositions[1]) + "," + str(cactusPositions[2]) 
 
@@ -110,7 +116,7 @@ while True: #continuosly looks for connections
     print("Connected to:", addr)
     playerData.append([450,0])
 
-    if currentPlayer == 2: 
+    if currentPlayer == 1: #1 less than the players needed to start 
         gameState = "countdown"
         startTime = time.time()
 

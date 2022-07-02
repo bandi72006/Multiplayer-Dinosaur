@@ -115,6 +115,8 @@ def offline():
 
         if gameSpeed <= 3:
             gameSpeed += 0.001
+        
+        print(gameSpeed)
 
         #Input handling
         keys = pygame.key.get_pressed()
@@ -248,11 +250,10 @@ def online():
             animationFrame = 0
     
         for i in range(len(playersDino)):    #If statement so every new frame, the sprite is changed
-            playersDino[i] = pygame.image.load(dinoChoices[int(playersDino[i])][0])
+            playersDino[i] = pygame.image.load(dinoChoices[int(playersDino[i])][1])
 
         #sprite drawings
         for i in range(len(playersDino)):
-            
             screen.blit(playersDino[i], (200,int(playersPos[i])))
 
         player.draw(animationFrame, screen)
